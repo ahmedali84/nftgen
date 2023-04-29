@@ -1,0 +1,218 @@
+import bpy
+from . import functions as func
+
+class ModePanel(bpy.types.Panel):
+    bl_label = "NFT Generator"
+    bl_idname = "OBJECT_PT_mode"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category= 'NFT Generator'
+
+    
+    def draw(self, context):
+        props = func.get_props()
+        layout = self.layout
+
+        row = layout.row(align= True)
+        row.prop_enum(props, "mode", "0")
+        row.prop_enum(props, "mode", "1")
+        row.prop_enum(props, "mode", "2")
+
+class NavigatePanel(bpy.types.Panel):
+    bl_label = "Navigate"
+    bl_idname = "OBJECT_PT_navigate"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category= 'NFT Generator'
+
+    @classmethod
+    def poll(cls, context):
+        props = func.get_props()
+        return props.mode in ["1", "2"]
+
+    def draw(self, context):
+        props = func.get_props()
+        layout = self.layout 
+        mode = props.mode
+        
+        col = layout.column(align=True)
+        col.prop(props, "active_token_id")
+
+        row = col.row(align=True)
+        row.operator("nftgen.dummy", text="First", icon="REW")
+        row.operator("nftgen.dummy", text="Last", icon= "FF")
+
+class TRAITS_UL_items(bpy.types.UIList):
+    """The Slots UI list"""
+    def draw_item(self, context, layout, data, item, icon, active_data, active_propname):
+        row = layout.row()
+        row.prop(item, "enable", text= "")
+        row.prop(item, "name", text= "", emboss=False)
+        # row.label(text= "") # a spacing to make selection easier
+        row.prop(item, "value_type", text= "")
+        
+
+class TRAITVALUES_UL_items(bpy.types.UIList):
+    """The Slots UI list"""
+    def draw_item(self, context, layout, data, item, icon, active_data, active_propname):
+        row = layout.row()
+        row.prop(item, "enable", text= "")
+        row.prop(item, "metadata_name", text= "", emboss=False)
+        row.prop(item, "rarity", text="")
+        
+        traits = func.get_traits()
+        trait = traits[item.trait_id]
+
+        # change the displayed propery depending on
+        # the trait this value is instanciated from
+        VALUE_TYPES = {
+            '0': "object_", 
+            '1': "collection_"
+        }
+        row.prop(item, VALUE_TYPES[trait.value_type], text="")
+
+    def filter_items(self, context, data, propname):
+        """Filter and order items in the list."""
+
+        # We initialize filtered and ordered as empty lists. Notice that 
+        # if all sorting and filtering is disabled, we will return
+        # these empty. 
+
+        filtered = []
+        ordered = []
+        items = getattr(data, propname)
+
+        # Filter
+
+        # Initialize with all items visible
+        filtered = [self.bitflag_filter_item] * len(items)
+
+        props = func.get_props()
+        active_trait_id = props.active_trait_id
+
+        for i, item in enumerate(items):
+            if item.trait_id != active_trait_id:
+                filtered[i] &= ~self.bitflag_filter_item
+
+        
+        return filtered, ordered
+        
+
+class TraitsPanel(bpy.types.Panel):
+    bl_label = "Traits"
+    bl_idname = "OBJECT_PT_traits"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category= 'NFT Generator'
+
+    @classmethod
+    def poll(cls, context):
+        props = func.get_props()
+        return props.mode == "0"
+
+    def draw(self, context):
+        scene = context.scene
+        props = func.get_props()
+        layout = self.layout
+
+        col = layout.column()
+        col.label(text= "Traits:")
+        row = col.row()
+        row.template_list(
+            "TRAITS_UL_items", "", scene, "traits", props, "active_trait_id"
+        )
+        sub = row.column(align= True)
+        sub.operator("nftgen.add_trait", icon='ADD', text="")
+        sub.operator("nftgen.remove_trait", icon='REMOVE', text="")
+
+        col.label(text= "Trait Values:")
+        row = col.row()
+        row.template_list(
+            "TRAITVALUES_UL_items", "", scene, "traits_values", props, "active_trait_value_id"
+        )
+        sub = row.column(align= True)
+        sub.operator("nftgen.add_trait_value", icon='ADD', text="")
+        sub.operator("nftgen.remove_trait_value", icon='REMOVE', text="")
+        sub.separator()
+        sub.operator("nftgen.clear_trait_value", icon="TRASH", text="")
+
+class GeneratePanel(bpy.types.Panel):
+    bl_label = "Generate"
+    bl_idname = "OBJECT_PT_generate"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category= 'NFT Generator'
+
+    @classmethod
+    def poll(cls, context):
+        props = func.get_props()
+        return props.mode == "0"
+
+    def draw(self, context):
+        scene = context.scene
+        props = func.get_props()
+        layout = self.layout
+        col = layout.column()
+        col.prop(props, "tokens_count")
+        col.operator("nftgen.dummy", text="Generate", icon="FILE_REFRESH")
+
+class RulesPanel(bpy.types.Panel):
+    bl_label = "Rules"
+    bl_idname = "OBJECT_PT_rules"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = 'NFT Generator'
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        props = func.get_props()
+        return props.mode == "0"
+
+    def draw(self, context):
+        scene = context.scene
+        props = func.get_props()
+        layout = self.layout
+        col = layout.column()
+
+class RenderPanel(bpy.types.Panel):
+    bl_label = "Render"
+    bl_idname = "OBJECT_PT_render"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = 'NFT Generator'
+
+    @classmethod
+    def poll(cls, context):
+        props = func.get_props()
+        return props.mode == "2"
+
+    def draw(self, context):
+        scene = context.scene
+        props = func.get_props()
+        layout = self.layout
+        col = layout.column(align=True)
+
+        col.prop(props, "render_from")
+        col.prop(props, "render_to")
+        col = layout.column()
+        col.operator("nftgen.dummy", text="Render", icon="RENDERLAYERS")
+
+classes = (
+    ModePanel, 
+    NavigatePanel, 
+    GeneratePanel, 
+    TRAITS_UL_items, 
+    TRAITVALUES_UL_items, 
+    TraitsPanel, 
+    RulesPanel, 
+    RenderPanel
+)
+
+def register():
+    for cls in classes:
+        bpy.utils.register_class(cls)
+
+def unregister():
+    for cls in classes:
+        bpy.utils.unregister_class(cls)
