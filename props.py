@@ -1,4 +1,16 @@
 import bpy
+from . import functions as func
+
+def active_trait_id_update(self, context):
+    all_trait_values = func.get_traits_values()
+
+    # get the relevant trait values
+    for tv in all_trait_values:
+        if tv.trait_id == self.active_trait_id:
+            idx = all_trait_values.find(tv.name)
+            pass
+    
+    self.active_trait_value_id = idx
 
 class NFTGenProps(bpy.types.PropertyGroup):
     active_token_id: bpy.props.IntProperty(
@@ -6,7 +18,13 @@ class NFTGenProps(bpy.types.PropertyGroup):
         default=0, 
         min=0
     ) #TODO: add setter/getter functions
-    active_trait_id: bpy.props.IntProperty(default=0, min=0)
+
+    active_trait_id: bpy.props.IntProperty(
+        default=0, 
+        min=0, 
+        update=active_trait_id_update
+    )
+
     active_trait_value_id: bpy.props.IntProperty(default=0, min=0)
 
     mode: bpy.props.EnumProperty(
