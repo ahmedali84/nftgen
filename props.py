@@ -8,9 +8,15 @@ def active_trait_id_update(self, context):
     for tv in all_trait_values:
         if tv.trait_id == self.active_trait_id:
             idx = all_trait_values.find(tv.name)
-            pass
     
     self.active_trait_value_id = idx
+
+def collection_object_update(self, context):
+    if self.object_ and not self.metadata_name:
+        self.metadata_name = self.object_.name
+
+    if self.collection_ and not self.metadata_name:
+        self.metadata_name = self.collection_.name
 
 class NFTGenProps(bpy.types.PropertyGroup):
     active_token_id: bpy.props.IntProperty(
@@ -110,8 +116,15 @@ class TraitValue(bpy.types.PropertyGroup):
         default=True
     )
 
-    object_: bpy.props.PointerProperty(type=bpy.types.Object)
-    collection_: bpy.props.PointerProperty(type=bpy.types.Collection)
+    object_: bpy.props.PointerProperty(
+        type=bpy.types.Object, 
+        update=collection_object_update
+    )
+
+    collection_: bpy.props.PointerProperty(
+        type=bpy.types.Collection, 
+        update=collection_object_update
+    )
 
 classes = (
     NFTGenProps, 
