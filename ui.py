@@ -59,8 +59,9 @@ class NavigatePanel(bpy.types.Panel):
 
         traits = func.get_traits()
         traits_values = func.get_traits_values()
+        box = layout.box()
         for attr in active_token_attr:
-            col.label(text=f"{traits[attr[0]].metadata_name} : {traits_values[attr[1]].metadata_name}")
+            box.label(text=f"{traits[attr[0]].metadata_name} : {traits_values[attr[1]].metadata_name}")
 
 
 
