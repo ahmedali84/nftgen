@@ -1,4 +1,5 @@
 import bpy
+import json
 from . import functions as func
 
 class ModePanel(bpy.types.Panel):
@@ -34,20 +35,41 @@ class NavigatePanel(bpy.types.Panel):
         props = func.get_props()
         layout = self.layout 
         mode = props.mode
+        tokens = func.get_tokens()
         
-        col = layout.column(align=True)
+        col = layout.column(align=False)
         col.prop(props, "active_token_id")
+        col.scale_y = 1.5
 
+        row = col.row(align=False)
+        if tokens:
+            row.label(text=f"{len(tokens)} Tokens")
+            row.operator("nftgen.clear_tokens", text="", icon='TRASH')
+
+        col = layout.column(align=True)
         row = col.row(align=True)
         row.operator("nftgen.dummy", text="First", icon="REW")
         row.operator("nftgen.dummy", text="Last", icon= "FF")
+
+        tokens = func.get_tokens()
+
+        # show the active token data
+        active_token = tokens[props.active_token_id]
+        active_token_attr = json.loads(active_token.attributes).items()
+
+        traits = func.get_traits()
+        traits_values = func.get_traits_values()
+        for attr in active_token_attr:
+            col.label(text=f"{traits[attr[0]].metadata_name} : {traits_values[attr[1]].metadata_name}")
+
+
 
 class TRAITS_UL_items(bpy.types.UIList):
     """The Slots UI list"""
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname):
         row = layout.row()
         row.prop(item, "enable", text= "")
-        row.prop(item, "name", text= "", emboss=False)
+        row.prop(item, "metadata_name", text= "", emboss=False)
         # row.label(text= "") # a spacing to make selection easier
         row.prop(item, "value_type", text= "")
         
@@ -89,9 +111,11 @@ class TRAITVALUES_UL_items(bpy.types.UIList):
 
         props = func.get_props()
         active_trait_id = props.active_trait_id
+        traits = func.get_traits()
+
 
         for i, item in enumerate(items):
-            if item.trait_id != active_trait_id:
+            if item.trait_id != traits[active_trait_id].name:
                 filtered[i] &= ~self.bitflag_filter_item
 
         
@@ -154,7 +178,7 @@ class GeneratePanel(bpy.types.Panel):
         layout = self.layout
         col = layout.column()
         col.prop(props, "tokens_count")
-        col.operator("nftgen.dummy", text="Generate", icon="FILE_REFRESH")
+        col.operator("nftgen.generate_tokens", text="Generate", icon="FILE_REFRESH")
 
 class RulesPanel(bpy.types.Panel):
     bl_label = "Rules"

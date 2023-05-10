@@ -8,9 +8,9 @@ def active_trait_id_update(self, context):
     for tv in all_trait_values:
         if tv.trait_id == self.active_trait_id:
             idx = all_trait_values.find(tv.name)
-    
-    self.active_trait_value_id = idx
-
+            self.active_trait_value_id = idx
+            return
+        
 def collection_object_update(self, context):
     if self.object_ and not self.metadata_name:
         self.metadata_name = self.object_.name
@@ -18,11 +18,15 @@ def collection_object_update(self, context):
     if self.collection_ and not self.metadata_name:
         self.metadata_name = self.collection_.name
 
+def active_token_update(self, context):
+    func.update_token(self.active_token_id)
+
 class NFTGenProps(bpy.types.PropertyGroup):
     active_token_id: bpy.props.IntProperty(
         name="Active Token", 
         default=0, 
-        min=0
+        min=0, 
+        update=active_token_update
     ) #TODO: add setter/getter functions
 
     active_trait_id: bpy.props.IntProperty(
@@ -75,6 +79,11 @@ class Trait(bpy.types.PropertyGroup):
         default=""
     )
 
+    metadata_name: bpy.props.StringProperty(
+        name="Metadata Name", 
+        default=""
+    )
+
     enable: bpy.props.BoolProperty(
         description="Enable this trait", 
         default=True
@@ -89,7 +98,7 @@ class Trait(bpy.types.PropertyGroup):
     )
 
 class TraitValue(bpy.types.PropertyGroup):
-    trait_id: bpy.props.IntProperty(
+    trait_id: bpy.props.StringProperty(
         name="Trait ID"
     )
     
