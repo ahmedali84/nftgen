@@ -140,17 +140,20 @@ class GenerateTokens(bpy.types.Operator):
         # clear existing tokens list
         tokens.clear()
         
-        # randomly generate new tokens
-        i = 0
-        while i < props.tokens_count:
+        # randomly generate new unique tokens
+        token_set = set()
+        while len(token_set) < props.tokens_count:
             token_data = {}
             for tt in traits:
                 choice = func.pick_random_choice(tt)
                 token_data[tt.name] = choice
 
-            i += 1
+            token_data = json.dumps(token_data)
+            token_set.add(token_data)
+
+        for element in token_set:
             new_token = tokens.add()
-            new_token.attributes = json.dumps(token_data)
+            new_token.attributes = element
 
         # navigate to the first token in the stack
         props.active_token_id = 0
