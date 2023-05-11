@@ -125,12 +125,14 @@ class ClearTraitValues(bpy.types.Operator):
 class GenerateTokens(bpy.types.Operator):
     bl_idname = "nftgen.generate_tokens"
     bl_label = "Generate Tokens"
-    bl_description = """Randomly generate tokens according to rarities assigned to each trait and tokens count"""
+    bl_description = """Randomly generate tokens according to rarities assigned to each trait"""
     bl_options = {'UNDO'}
 
     @classmethod
     def poll(cls, context):
-        return True
+        props = func.get_props()
+        max_unique_tokens = func.max_unique_tokens()
+        return props.tokens_count <= max_unique_tokens
 
     def execute(self, context):
         props = func.get_props()

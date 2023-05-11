@@ -163,6 +163,8 @@ class TraitsPanel(bpy.types.Panel):
         sub.separator()
         sub.operator("nftgen.clear_trait_value", icon="TRASH", text="")
 
+        col.label(text=f"Max unique tokens= {func.max_unique_tokens()}")
+
 class GeneratePanel(bpy.types.Panel):
     bl_label = "Generate"
     bl_idname = "OBJECT_PT_generate"

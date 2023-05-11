@@ -2,6 +2,8 @@ import bpy
 import uuid
 import random
 import json
+from math import prod
+from collections import Counter
 
 def get_props():
     return bpy.context.scene.nftgen
@@ -86,3 +88,12 @@ def update_token(token_index):
             trait_value.collection_.hide_render = False
 
     bpy.context.view_layer.update()
+
+def max_unique_tokens():
+    """Get maximum number of available unique variations"""
+    traits_values = get_traits_values()
+    
+    rec_list = [tv.trait_id for tv in traits_values]
+    counter_dict = Counter(rec_list)
+
+    return prod(list(counter_dict.values()))
