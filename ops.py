@@ -171,6 +171,10 @@ class ClearTokens(bpy.types.Operator):
     def execute(self, context):
         tokens = func.get_tokens()
         tokens.clear()
+
+        # go back to the generate panel
+        props = func.get_props()
+        props.mode = '0'
         return {'FINISHED'}
 
 
