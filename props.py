@@ -21,13 +21,23 @@ def collection_object_update(self, context):
 def active_token_update(self, context):
     func.update_token(self.active_token_id)
 
+def active_token_set(self, value):
+    tokens = func.get_tokens()
+    new_value = min(max(0, value), len(tokens) - 1)
+    self['active_token_id'] = new_value
+ 
+def active_token_get(self):
+    return self.get('active_token_id', 0)
+
 class NFTGenProps(bpy.types.PropertyGroup):
     active_token_id: bpy.props.IntProperty(
         name="Active Token", 
         default=0, 
         min=0, 
-        update=active_token_update
-    ) #TODO: add setter/getter functions
+        update=active_token_update, 
+        get=active_token_get, 
+        set=active_token_set
+    )
 
     active_trait_id: bpy.props.IntProperty(
         default=0, 
