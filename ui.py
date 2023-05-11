@@ -29,7 +29,8 @@ class NavigatePanel(bpy.types.Panel):
     @classmethod
     def poll(cls, context):
         props = func.get_props()
-        return props.mode in ["1", "2"]
+        tokens = func.get_tokens()
+        return props.mode in ["1", "2"] and tokens
 
     def draw(self, context):
         props = func.get_props()
@@ -38,8 +39,9 @@ class NavigatePanel(bpy.types.Panel):
         tokens = func.get_tokens()
         
         col = layout.column(align=False)
-        col.prop(props, "active_token_id")
-        col.scale_y = 1.5
+        if tokens:
+            col.prop(props, "active_token_id")
+            col.scale_y = 2
 
         row = col.row(align=False)
         if tokens:
@@ -51,17 +53,17 @@ class NavigatePanel(bpy.types.Panel):
         row.operator("nftgen.dummy", text="First", icon="REW")
         row.operator("nftgen.dummy", text="Last", icon= "FF")
 
-        tokens = func.get_tokens()
 
         # show the active token data
-        active_token = tokens[props.active_token_id]
-        active_token_attr = json.loads(active_token.attributes).items()
+        if tokens:
+            active_token = tokens[props.active_token_id]
+            active_token_attr = json.loads(active_token.attributes).items()
 
-        traits = func.get_traits()
-        traits_values = func.get_traits_values()
-        box = layout.box()
-        for attr in active_token_attr:
-            box.label(text=f"{traits[attr[0]].metadata_name} : {traits_values[attr[1]].metadata_name}")
+            traits = func.get_traits()
+            traits_values = func.get_traits_values()
+            box = layout.box()
+            for attr in active_token_attr:
+                box.label(text=f"{traits[attr[0]].metadata_name} : {traits_values[attr[1]].metadata_name}")
 
 
 
@@ -210,7 +212,8 @@ class RenderPanel(bpy.types.Panel):
     @classmethod
     def poll(cls, context):
         props = func.get_props()
-        return props.mode == "2"
+        tokens = func.get_tokens()
+        return props.mode == "2" and tokens
 
     def draw(self, context):
         scene = context.scene
