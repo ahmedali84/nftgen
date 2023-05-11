@@ -30,7 +30,7 @@ class NavigatePanel(bpy.types.Panel):
     def poll(cls, context):
         props = func.get_props()
         tokens = func.get_tokens()
-        return props.mode in ["1", "2"] and tokens
+        return props.mode == '1'  and tokens
 
     def draw(self, context):
         props = func.get_props()
