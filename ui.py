@@ -50,8 +50,8 @@ class NavigatePanel(bpy.types.Panel):
 
         col = layout.column(align=True)
         row = col.row(align=True)
-        row.operator("nftgen.dummy", text="First", icon="REW")
-        row.operator("nftgen.dummy", text="Last", icon= "FF")
+        # row.operator("nftgen.dummy", text="First", icon="REW")
+        # row.operator("nftgen.dummy", text="Last", icon= "FF")
 
 
         # show the active token data
