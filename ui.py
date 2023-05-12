@@ -43,6 +43,7 @@ class NavigatePanel(bpy.types.Panel):
             col.prop(props, "active_token_id")
             col.scale_y = 2
 
+        col = layout.column(align=False)
         row = col.row(align=False)
         if tokens:
             row.label(text=f"{len(tokens)} Tokens")
@@ -53,6 +54,26 @@ class NavigatePanel(bpy.types.Panel):
         # row.operator("nftgen.dummy", text="First", icon="REW")
         # row.operator("nftgen.dummy", text="Last", icon= "FF")
 
+class TokenDetailsPanel(bpy.types.Panel):
+    bl_label = "Token Details"
+    bl_idname = "OBJECT_PT_tkndetails"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category= 'NFT Generator'
+    bl_parent_id= 'OBJECT_PT_navigate'
+
+    @classmethod
+    def poll(cls, context):
+        props = func.get_props()
+        tokens = func.get_tokens()
+        return props.mode == '1'  and tokens
+
+    def draw(self, context):
+        props = func.get_props()
+        layout = self.layout
+        col = layout.column(align= True)
+        mode = props.mode
+        tokens = func.get_tokens()
 
         # show the active token data
         if tokens:
@@ -61,10 +82,11 @@ class NavigatePanel(bpy.types.Panel):
 
             traits = func.get_traits()
             traits_values = func.get_traits_values()
-            box = layout.box()
-            for attr in active_token_attr:
-                box.label(text=f"{traits[attr[0]].metadata_name} : {traits_values[attr[1]].metadata_name}")
 
+            for attr in active_token_attr:
+                row = col.row(align=False)
+                row.label(text=f"{traits[attr[0]].metadata_name} :")
+                row.label(text=f"{traits_values[attr[1]].metadata_name}")
 
 
 class TRAITS_UL_items(bpy.types.UIList):
@@ -73,7 +95,6 @@ class TRAITS_UL_items(bpy.types.UIList):
         row = layout.row()
         row.prop(item, "enable", text= "")
         row.prop(item, "metadata_name", text= "", emboss=False)
-        # row.label(text= "") # a spacing to make selection easier
         row.prop(item, "value_type", text= "")
         
 
@@ -231,6 +252,7 @@ class RenderPanel(bpy.types.Panel):
 classes = (
     ModePanel, 
     NavigatePanel, 
+    TokenDetailsPanel, 
     GeneratePanel, 
     TRAITS_UL_items, 
     TRAITVALUES_UL_items, 
