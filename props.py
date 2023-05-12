@@ -107,6 +107,11 @@ class Trait(bpy.types.PropertyGroup):
         default= '0'
     )
 
+    expanded: bpy.props.BoolProperty(
+        name="Expand", 
+        default=False
+    )
+
 class TraitValue(bpy.types.PropertyGroup):
     trait_id: bpy.props.StringProperty(
         name="Trait ID"

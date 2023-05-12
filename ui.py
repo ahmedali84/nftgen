@@ -55,7 +55,7 @@ class NavigatePanel(bpy.types.Panel):
         # row.operator("nftgen.dummy", text="Last", icon= "FF")
 
 class TokenDetailsPanel(bpy.types.Panel):
-    bl_label = "Token Details"
+    bl_label = "Active Token Details"
     bl_idname = "OBJECT_PT_tkndetails"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
@@ -250,7 +250,7 @@ class RenderPanel(bpy.types.Panel):
         col.operator("nftgen.dummy", text="Render", icon="RENDERLAYERS")
 
 class StatsPanel(bpy.types.Panel):
-    bl_label = "Stats"
+    bl_label = "Tokens Stats"
     bl_idname = "OBJECT_PT_stats"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
@@ -267,16 +267,34 @@ class StatsPanel(bpy.types.Panel):
         traits_values = func.get_traits_values()
 
         layout = self.layout
-        col = layout.column()
-        for tt in traits:
-            col.label(text=f"{tt.metadata_name}:")
-            trait_counter_dict = func.trait_stats(tt)
+        col = layout.column(align=True)
+        # for tt in traits:
+        #     col.label(text=f"{tt.metadata_name}:")
+        #     trait_counter_dict = func.trait_stats(tt)
             
+        #     for entry in trait_counter_dict.items():
+        #         col = layout.column()
+        #         row = col.row()
+        #         row.label(text=f"{traits_values[entry[0]].metadata_name}: ")
+        #         row.label(text=f"{entry[1]}")
+
+        for tt in traits:
+            col.prop(
+                tt, 
+                "expanded", 
+                text=f"{tt.metadata_name}", 
+                emboss=False, 
+                icon="TRIA_DOWN" if tt.expanded else "TRIA_RIGHT"
+            )
+
+            trait_counter_dict = func.trait_stats(tt)
             for entry in trait_counter_dict.items():
-                col = layout.column()
-                row = col.row()
-                row.label(text=f"{traits_values[entry[0]].metadata_name}: ")
-                row.label(text=f"{entry[1]}")
+                if tt.expanded:
+                    col = layout.column()
+                    row = col.row()
+                    row.label(text=f"{traits_values[entry[0]].metadata_name}: ")
+                    row.label(text=f"{entry[1]}")
+
 
 
 classes = (
