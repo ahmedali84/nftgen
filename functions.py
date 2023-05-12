@@ -97,3 +97,14 @@ def max_unique_tokens():
     counter_dict = Counter(rec_list)
 
     return prod(list(counter_dict.values()))
+
+def trait_stats(trait):
+    """Calculate the percentage of trait value occurences in the tokens stack"""
+    tokens = get_tokens()
+
+    trait_values = []
+    for tk in tokens:
+        token_attributes = json.loads(tk.attributes)
+        trait_values.append(token_attributes[trait.name])
+
+    return Counter(trait_values)

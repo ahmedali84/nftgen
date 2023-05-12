@@ -249,6 +249,38 @@ class RenderPanel(bpy.types.Panel):
         col = layout.column()
         col.operator("nftgen.dummy", text="Render", icon="RENDERLAYERS")
 
+class StatsPanel(bpy.types.Panel):
+    bl_label = "Stats"
+    bl_idname = "OBJECT_PT_stats"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = 'NFT Generator'
+    bl_options = {'DEFAULT_CLOSED'}
+
+    panel_id: bpy.props.StringProperty(default="null")
+
+    @classmethod
+    def poll(cls, context):
+        props = func.get_props()
+        return props.mode == "1"
+
+    def draw(self, context):
+        traits = func.get_traits()
+        traits_values = func.get_traits_values()
+
+        layout = self.layout
+        col = layout.column()
+        for tt in traits:
+            col.label(text=f"{tt.metadata_name}:")
+            trait_counter_dict = func.trait_stats(tt)
+            
+            for entry in trait_counter_dict.items():
+                col = layout.column()
+                row = col.row()
+                row.label(text=f"{traits_values[entry[0]].metadata_name}: ")
+                row.label(text=f"{entry[1]}")
+
+
 classes = (
     ModePanel, 
     NavigatePanel, 
@@ -258,7 +290,8 @@ classes = (
     TRAITVALUES_UL_items, 
     TraitsPanel, 
     RulesPanel, 
-    RenderPanel
+    RenderPanel, 
+    StatsPanel
 )
 
 def register():
@@ -266,5 +299,5 @@ def register():
         bpy.utils.register_class(cls)
 
 def unregister():
-    for cls in classes:
+    for cls in reversed(classes):
         bpy.utils.unregister_class(cls)
