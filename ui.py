@@ -257,8 +257,6 @@ class StatsPanel(bpy.types.Panel):
     bl_category = 'NFT Generator'
     bl_options = {'DEFAULT_CLOSED'}
 
-    panel_id: bpy.props.StringProperty(default="null")
-
     @classmethod
     def poll(cls, context):
         props = func.get_props()
