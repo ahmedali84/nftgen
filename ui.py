@@ -224,7 +224,7 @@ class RulesPanel(bpy.types.Panel):
     @classmethod
     def poll(cls, context):
         props = func.get_props()
-        return props.mode == "0"
+        return props.mode in ['0', '1']
 
     def draw(self, context):
         scene = context.scene
