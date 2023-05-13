@@ -91,7 +91,7 @@ class TRAITS_UL_items(bpy.types.UIList):
     """The Slots UI list"""
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname):
         row = layout.row()
-        row.prop(item, "enable", text= "")
+        # row.prop(item, "enable", text= "")
         row.prop(item, "metadata_name", text= "", emboss=False)
         row.prop(item, "value_type", text= "")
         
@@ -100,7 +100,7 @@ class TRAITVALUES_UL_items(bpy.types.UIList):
     """The Slots UI list"""
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname):
         row = layout.row()
-        row.prop(item, "enable", text= "")
+        # row.prop(item, "enable", text= "")
         row.prop(item, "metadata_name", text= "", emboss=False)
         row.prop(item, "rarity", text="")
         
