@@ -240,6 +240,9 @@ class RulesPanel(bpy.types.Panel):
         sub = row.column(align= True)
         sub.operator("nftgen.add_rule", icon='ADD', text="")
         sub.operator("nftgen.remove_rule", icon='REMOVE', text="")
+        sub.separator()
+        sub.operator("nftgen.up_rule", icon='TRIA_UP', text="")
+        sub.operator("nftgen.down_rule", icon='TRIA_DOWN', text="")
 
 class RenderPanel(bpy.types.Panel):
     bl_label = "Render"

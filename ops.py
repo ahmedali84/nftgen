@@ -224,6 +224,48 @@ class RemoveRule(bpy.types.Operator):
         props.active_rule_id = max(0, idx - 1)
         return {'FINISHED'}
 
+class UpRule(bpy.types.Operator):
+    bl_idname = "nftgen.up_rule"
+    bl_label = "Up"
+    bl_description = "Move selected rule up"
+    bl_options = {'UNDO'}
+
+    @classmethod
+    def poll(cls, context):
+        rules = func.get_rules()
+        props = func.get_props()
+        
+        return bool(rules) and props.active_rule_id > 0
+
+    def execute(self, context):
+        props = func.get_props()
+        rules = func.get_rules()
+
+        rules.move(props.active_rule_id, props.active_rule_id - 1)
+        props.active_rule_id -= 1
+        return {'FINISHED'}
+    
+class DownRule(bpy.types.Operator):
+    bl_idname = "nftgen.down_rule"
+    bl_label = "Down"
+    bl_description = "Move selected rule down"
+    bl_options = {'UNDO'}
+
+    @classmethod
+    def poll(cls, context):
+        rules = func.get_rules()
+        props = func.get_props()
+        
+        return bool(rules) and props.active_rule_id < len(rules) - 1
+
+    def execute(self, context):
+        props = func.get_props()
+        rules = func.get_rules()
+
+        rules.move(props.active_rule_id, props.active_rule_id + 1)
+        props.active_rule_id += 1
+        return {'FINISHED'}
+
 classes = (
     Dummy, 
     AddTrait, 
@@ -235,7 +277,9 @@ classes = (
     GenerateTokens, 
     ClearTokens, 
     AddRule, 
-    RemoveRule
+    RemoveRule, 
+    UpRule, 
+    DownRule
 )
 
 def register():
