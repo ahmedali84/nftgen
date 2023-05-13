@@ -184,10 +184,11 @@ class Rule(bpy.types.PropertyGroup):
 
     relation: bpy.props.EnumProperty(
         items= [
-            ("0", "Always with", "Always with", '', 0),
-            ("1", "Never with", "Never with", '', 1)
+            ("0", "Never With", "Never with", '', 0),
+            ("1", "Only With", "Only With", '', 1), 
+            ("2", "Always Pair With", "Always Pair With", '', 2)
         ],
-        default= '1'
+        default= '0'
     )
 
 classes = (
