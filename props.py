@@ -29,6 +29,18 @@ def active_token_set(self, value):
 def active_token_get(self):
     return self.get('active_token_id', 0)
 
+def rules_items(scene, context):
+    traits_values = func.get_traits_values()
+
+    items = []
+    # add an empty entry
+    items.append(("", "", ""))
+
+    for tv in traits_values:
+        items.append((tv.name, tv.metadata_name, ""))
+
+    return items
+
 class NFTGenProps(bpy.types.PropertyGroup):
     active_token_id: bpy.props.IntProperty(
         name="Active Token", 
@@ -46,6 +58,8 @@ class NFTGenProps(bpy.types.PropertyGroup):
     )
 
     active_trait_value_id: bpy.props.IntProperty(default=0, min=0)
+
+    active_rule_id: bpy.props.IntProperty(default=0, min=0)
 
     mode: bpy.props.EnumProperty(
         items= [
@@ -150,11 +164,38 @@ class TraitValue(bpy.types.PropertyGroup):
         update=collection_object_update
     )
 
+class Rule(bpy.types.PropertyGroup):
+    name: bpy.props.StringProperty(
+        default="Rule"
+    )
+
+    enable: bpy.props.BoolProperty(
+        default=True, 
+        description="Enable/Disable runle in Tokens generation"
+    )
+
+    value_1: bpy.props.EnumProperty(
+        items=rules_items
+    )
+
+    value_2: bpy.props.EnumProperty(
+        items=rules_items
+    )
+
+    relation: bpy.props.EnumProperty(
+        items= [
+            ("0", "Always with", "Always with", '', 0),
+            ("1", "Never with", "Never with", '', 1)
+        ],
+        default= '1'
+    )
+
 classes = (
     NFTGenProps, 
     Token, 
     Trait, 
-    TraitValue
+    TraitValue, 
+    Rule
 )
 
 def register():
@@ -163,7 +204,8 @@ def register():
     bpy.types.Scene.nftgen = bpy.props.PointerProperty(type=NFTGenProps)
     bpy.types.Scene.tokens = bpy.props.CollectionProperty(type=Token)
     bpy.types.Scene.traits = bpy.props.CollectionProperty(type=Trait)
-    bpy.types.Scene.traits_values = bpy.props.CollectionProperty(type=TraitValue)   
+    bpy.types.Scene.traits_values = bpy.props.CollectionProperty(type=TraitValue)
+    bpy.types.Scene.rules = bpy.props.CollectionProperty(type=Rule)   
 
 def unregister():
     for cls in classes:
@@ -172,3 +214,4 @@ def unregister():
     del bpy.types.Scene.tokens
     del bpy.types.Scene.traits
     del bpy.types.Scene.traits_values
+    del bpy.types.Scene.rules

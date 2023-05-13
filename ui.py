@@ -51,8 +51,6 @@ class NavigatePanel(bpy.types.Panel):
 
         col = layout.column(align=True)
         row = col.row(align=True)
-        # row.operator("nftgen.dummy", text="First", icon="REW")
-        # row.operator("nftgen.dummy", text="Last", icon= "FF")
 
 class TokenDetailsPanel(bpy.types.Panel):
     bl_label = "Active Token Details"
@@ -144,7 +142,16 @@ class TRAITVALUES_UL_items(bpy.types.UIList):
 
         
         return filtered, ordered
-        
+
+class RULES_UL_items(bpy.types.UIList):
+    """The Slots UI list"""
+    def draw_item(self, context, layout, data, item, icon, active_data, active_propname):
+        row = layout.row()
+        row.prop(item, "enable", text= "")
+        row.separator()
+        row.prop(item, "value_1", text= "")
+        row.prop(item, "relation", text= "")
+        row.prop(item, "value_2", text= "")
 
 class TraitsPanel(bpy.types.Panel):
     bl_label = "Traits"
@@ -223,7 +230,16 @@ class RulesPanel(bpy.types.Panel):
         scene = context.scene
         props = func.get_props()
         layout = self.layout
+
         col = layout.column()
+        col.label(text= "Rules:")
+        row = col.row()
+        row.template_list(
+            "RULES_UL_items", "", scene, "rules", props, "active_rule_id"
+        )
+        sub = row.column(align= True)
+        sub.operator("nftgen.add_rule", icon='ADD', text="")
+        sub.operator("nftgen.remove_rule", icon='REMOVE', text="")
 
 class RenderPanel(bpy.types.Panel):
     bl_label = "Render"
@@ -268,15 +284,6 @@ class StatsPanel(bpy.types.Panel):
 
         layout = self.layout
         col = layout.column(align=True)
-        # for tt in traits:
-        #     col.label(text=f"{tt.metadata_name}:")
-        #     trait_counter_dict = func.trait_stats(tt)
-            
-        #     for entry in trait_counter_dict.items():
-        #         col = layout.column()
-        #         row = col.row()
-        #         row.label(text=f"{traits_values[entry[0]].metadata_name}: ")
-        #         row.label(text=f"{entry[1]}")
 
         for tt in traits:
             col.prop(
@@ -292,6 +299,7 @@ class StatsPanel(bpy.types.Panel):
                 if tt.expanded:
                     col = layout.column()
                     row = col.row()
+                    row.separator()
                     row.label(text=f"{traits_values[entry[0]].metadata_name}: ")
                     row.label(text=f"{entry[1]}")
 
@@ -305,6 +313,7 @@ classes = (
     TRAITS_UL_items, 
     TRAITVALUES_UL_items, 
     TraitsPanel, 
+    RULES_UL_items, 
     RulesPanel, 
     RenderPanel, 
     StatsPanel

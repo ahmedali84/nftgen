@@ -182,6 +182,47 @@ class ClearTokens(bpy.types.Operator):
         props.mode = '0'
         return {'FINISHED'}
 
+class AddRule(bpy.types.Operator):
+    bl_idname = "nftgen.add_rule"
+    bl_label = "Add"
+    bl_description = "Add new rule"
+    bl_options = {'UNDO'}
+
+    @classmethod
+    def poll(cls, context):
+        traits = func.get_traits()
+        return bool(traits)
+
+    def execute(self, context):
+        props = func.get_props()
+        rules = func.get_rules()
+
+        new_rule = rules.add()
+        new_rule.name = func.generate_random_id()
+        idx = rules.find(new_rule.name)
+        props.active_rule_id = idx
+        return {'FINISHED'}
+
+class RemoveRule(bpy.types.Operator):
+    bl_idname = "nftgen.remove_rule"
+    bl_label = "Remove"
+    bl_description = "Remove selected rule"
+    bl_options = {'UNDO'}
+
+    @classmethod
+    def poll(cls, context):
+        rules = func.get_rules()
+        return bool(rules)
+
+    def execute(self, context):
+        props = func.get_props()
+        rules = func.get_rules()
+
+        idx = props.active_rule_id
+        rules.remove(idx)
+
+        props.active_rule_id = max(0, idx - 1)
+        return {'FINISHED'}
 
 classes = (
     Dummy, 
@@ -192,7 +233,9 @@ classes = (
     ClearTraitValues, 
     RenderBatch, 
     GenerateTokens, 
-    ClearTokens
+    ClearTokens, 
+    AddRule, 
+    RemoveRule
 )
 
 def register():

@@ -17,6 +17,9 @@ def get_traits_values():
 def get_tokens():
     return bpy.context.scene.tokens
 
+def get_rules():
+    return bpy.context.scene.rules
+
 def remove_trait_values(trait_name):
     trait_values = get_traits_values()
 
