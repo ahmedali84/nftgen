@@ -157,7 +157,19 @@ def apply_rules(token_dict):
 
     rules = get_rules()
     for rule in rules:
-        if token_dict and rule.enable:
+        if token_dict and rule.enable and is_rule_valid(rule):
             token_dict = RELATIONS[rule.relation](token_dict, rule.value_1, rule.value_2)
 
     return token_dict
+
+def is_rule_valid(rule):
+    """Detect if rule is valid"""
+    # value_1 and value_2 are not empty
+    if '0' in [rule.value_1, rule.value_2]:
+        return False
+
+    # value_1 doesn't equel value_2
+    if rule.value_1 == rule.value_2:
+        return False
+    
+    return True

@@ -34,7 +34,7 @@ def rules_items(scene, context):
 
     items = []
     # add an empty entry
-    items.append(("", "", ""))
+    items.append(("0", "", ""))
 
     for tv in traits_values:
         items.append((tv.name, tv.metadata_name, ""))
