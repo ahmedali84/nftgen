@@ -20,6 +20,9 @@ def get_tokens():
 def get_rules():
     return bpy.context.scene.rules
 
+def get_active_token_props():
+    return bpy.context.scene.active_token_props
+
 def remove_trait_values(trait_name):
     trait_values = get_traits_values()
 
@@ -54,10 +57,7 @@ def pick_random_choice(trait):
 
     return choice[0]
 
-def update_token(token_index):
-    tokens = get_tokens()
-    token = tokens[token_index]
-
+def update_token(token_dict):
     traits_values = get_traits_values()
 
     # hide all relevant objects/collections
@@ -79,7 +79,7 @@ def update_token(token_index):
 
     
     # unhide the given token relevant objects/collections
-    token_attributes = json.loads(token.attributes).values()
+    token_attributes = token_dict.values()
     for attr in token_attributes:
         trait_value = traits_values[attr]
         if trait_value.object_:
@@ -173,3 +173,26 @@ def is_rule_valid(rule):
         return False
     
     return True
+
+def set_active_token_props():
+    props = get_props()
+    tokens = get_tokens()
+    active_token = tokens[props.active_token_id]
+    active_token_dict = json.loads(active_token.attributes)
+
+    active_token_props = get_active_token_props()
+    active_token_props.clear()
+
+    for trait_id, trait_value_id in active_token_dict.items():
+        new_token_prop = active_token_props.add()
+        new_token_prop.trait = trait_id
+        new_token_prop.trait_value = trait_value_id
+
+def copy_active_token_props():
+    active_token_props = get_active_token_props()
+
+    token_data = {}
+    for entry in active_token_props:
+        token_data[entry.trait] = entry.trait_value
+
+    return token_data

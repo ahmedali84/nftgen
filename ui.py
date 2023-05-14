@@ -67,24 +67,19 @@ class TokenDetailsPanel(bpy.types.Panel):
         return props.mode == '1'  and tokens
 
     def draw(self, context):
-        props = func.get_props()
         layout = self.layout
-        col = layout.column(align= True)
-        mode = props.mode
         tokens = func.get_tokens()
+        traits = func.get_traits()
 
         # show the active token data
         if tokens:
-            active_token = tokens[props.active_token_id]
-            active_token_attr = json.loads(active_token.attributes).items()
+            active_token_props = func.get_active_token_props()
 
-            traits = func.get_traits()
-            traits_values = func.get_traits_values()
-
-            for attr in active_token_attr:
+            col = layout.column(align= True)
+            for p in active_token_props:
                 row = col.row(align=False)
-                row.label(text=f"{traits[attr[0]].metadata_name} :")
-                row.label(text=f"{traits_values[attr[1]].metadata_name}")
+                row.label(text=f"{traits[p.trait].metadata_name}:")
+                row.prop(p, "trait_value", text="")
 
 
 class TRAITS_UL_items(bpy.types.UIList):

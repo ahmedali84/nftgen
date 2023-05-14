@@ -1,5 +1,6 @@
 import bpy
 from . import functions as func
+import json
 
 def active_trait_id_update(self, context):
     all_trait_values = func.get_traits_values()
@@ -19,7 +20,11 @@ def collection_object_update(self, context):
         self.metadata_name = self.collection_.name
 
 def active_token_update(self, context):
-    func.update_token(self.active_token_id)
+    # tokens = func.get_tokens()
+    # token = tokens[self.active_token_id]
+    # token_dict = json.loads(token.attributes)
+    # func.update_token(token_dict)
+    func.set_active_token_props()
 
 def active_token_set(self, value):
     tokens = func.get_tokens()
@@ -40,6 +45,37 @@ def rules_items(scene, context):
         items.append((tv.name, tv.metadata_name, ""))
 
     return items
+
+def active_token_tv_items(self, context):
+    items = []
+    # items.append(("0", "", ""))
+
+    # active_token_props = func.get_active_token_props()
+
+    if self.trait:
+        traits_values = func.get_traits_values()
+
+        active_traits_values = [tv for tv in traits_values if tv.trait_id == self.trait]
+        for tv in active_traits_values:
+            items.append((tv.name, tv.metadata_name, ""))
+
+    return items
+
+def active_token_trait_update(self, context):
+    # refresh the relevant traits values menu
+    active_token_tv_items(context.scene, context)
+
+def active_token_tv_update(self, context):
+    token_dict = func.copy_active_token_props()
+
+    # update viewport and render settings
+    func.update_token(token_dict)
+
+    # save to active token attributes
+    props = func.get_props()
+    tokens = func.get_tokens()
+    token = tokens[props.active_token_id]
+    token.attributes = json.dumps(token_dict)
 
 class NFTGenProps(bpy.types.PropertyGroup):
     active_token_id: bpy.props.IntProperty(
@@ -191,12 +227,20 @@ class Rule(bpy.types.PropertyGroup):
         default= '0'
     )
 
+class ActiveTokenProps(bpy.types.PropertyGroup):
+    trait: bpy.props.StringProperty(default="")
+    trait_value: bpy.props.EnumProperty(
+        items=active_token_tv_items, 
+        update=active_token_tv_update
+    )
+
 classes = (
     NFTGenProps, 
     Token, 
     Trait, 
     TraitValue, 
-    Rule
+    Rule, 
+    ActiveTokenProps
 )
 
 def register():
@@ -206,7 +250,8 @@ def register():
     bpy.types.Scene.tokens = bpy.props.CollectionProperty(type=Token)
     bpy.types.Scene.traits = bpy.props.CollectionProperty(type=Trait)
     bpy.types.Scene.traits_values = bpy.props.CollectionProperty(type=TraitValue)
-    bpy.types.Scene.rules = bpy.props.CollectionProperty(type=Rule)   
+    bpy.types.Scene.rules = bpy.props.CollectionProperty(type=Rule)
+    bpy.types.Scene.active_token_props = bpy.props.CollectionProperty(type=ActiveTokenProps)
 
 def unregister():
     for cls in classes:
@@ -216,3 +261,4 @@ def unregister():
     del bpy.types.Scene.traits
     del bpy.types.Scene.traits_values
     del bpy.types.Scene.rules
+    del bpy.types.Scene.active_token_props
