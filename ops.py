@@ -150,8 +150,11 @@ class GenerateTokens(bpy.types.Operator):
                 choice = func.pick_random_choice(tt)
                 token_data[tt.name] = choice
 
-            token_data = json.dumps(token_data)
-            token_set.add(token_data)
+            # implement rules here
+            token_data = func.apply_rules(token_data)
+            if token_data:
+                token_data = json.dumps(token_data)
+                token_set.add(token_data)
 
         for element in token_set:
             new_token = tokens.add()

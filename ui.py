@@ -148,9 +148,10 @@ class RULES_UL_items(bpy.types.UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname):
         row = layout.row()
         row.prop(item, "enable", text= "")
-        row.separator()
+        # row.separator()
         row.prop(item, "value_1", text= "")
         row.prop(item, "relation", text= "")
+        row.separator()
         row.prop(item, "value_2", text= "")
 
 class TraitsPanel(bpy.types.Panel):

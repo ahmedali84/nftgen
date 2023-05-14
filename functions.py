@@ -111,3 +111,53 @@ def trait_stats(trait):
         trait_values.append(token_attributes[trait.name])
 
     return Counter(trait_values)
+
+def never_with(token_dict, val_1, val_2):
+    """Empty token if val_1 and val_2 exist in the token dictionary"""
+    if val_1 in token_dict.values() and val_2 in token_dict.values():
+        return None
+    else:
+        return token_dict
+    
+def only_with(token_dict, val_1, val_2):
+    """If val_1 in token change the relevant trait to val_2"""
+    traits_values = get_traits_values()
+
+    if val_1 in token_dict.values():
+        token_dict[traits_values[val_2].trait_id] = val_2
+        return token_dict
+    else:
+        # do nothing
+        return token_dict
+
+def always_pair_with(token_dict, val_1, val_2):
+    """Always make sure if either values exist in token the relevant trait 
+    updeted to equal the other one"""
+    traits_values = get_traits_values()
+
+    if val_1 in token_dict.values():
+        token_dict[traits_values[val_2].trait_id] = val_2
+        return token_dict
+    
+    elif val_2 in token_dict.values():
+        token_dict[traits_values[val_1].trait_id] = val_1
+        return token_dict
+    
+    else:
+        # do nothing
+        return token_dict
+
+def apply_rules(token_dict):
+    """Apply all the rules in the rules stack"""
+    RELATIONS = {
+        '0': never_with, 
+        '1': only_with, 
+        '2': always_pair_with
+    }
+
+    rules = get_rules()
+    for rule in rules:
+        if token_dict:
+            token_dict = RELATIONS[rule.relation](token_dict, rule.value_1, rule.value_2)
+
+    return token_dict
