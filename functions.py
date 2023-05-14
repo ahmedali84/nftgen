@@ -157,7 +157,7 @@ def apply_rules(token_dict):
 
     rules = get_rules()
     for rule in rules:
-        if token_dict:
+        if token_dict and rule.enable:
             token_dict = RELATIONS[rule.relation](token_dict, rule.value_1, rule.value_2)
 
     return token_dict
