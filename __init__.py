@@ -16,6 +16,7 @@ if "bpy" in locals():
     importlib.reload(functions)
     importlib.reload(props)
     importlib.reload(ops)
+    importlib.reload(generate_tokens)
     importlib.reload(ui)
     importlib.reload(metadata)
     importlib.reload(render)
@@ -24,6 +25,7 @@ else:
     from. import functions
     from . import props
     from . import ops
+    from . import generate_tokens
     from . import ui
     from . import metadata
     from . import render
@@ -45,9 +47,11 @@ bl_info = {
 def register():
     props.register()
     ops.register()
+    generate_tokens.register()
     ui.register()
 
 def unregister():
     props.unregister()
     ops.unregister()
+    generate_tokens.unregister()
     ui.unregister()
