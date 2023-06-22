@@ -196,3 +196,12 @@ def copy_active_token_props():
         token_data[entry.trait] = entry.trait_value
 
     return token_data
+
+def generate_token_data(traits):
+    """Randomly generate token data according to the given traits"""
+    token_data = {}
+    for tt in traits:
+        choice = pick_random_choice(tt)
+        token_data[tt.name] = choice
+
+    return token_data
