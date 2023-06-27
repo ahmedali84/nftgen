@@ -3,9 +3,9 @@ import os
 from . import functions as func
 
 class RenderBatch(bpy.types.Operator):
-    bl_idname = "hbb.render_batch"
-    bl_label = "Render Batch"
-    bl_description = "Render a batch of HBBs in the collection starting with -from- to -To-"
+    bl_idname = "nftgen.render"
+    bl_label = "Render"
+    bl_description = "Render tokens in range -from- to -To-"
     bl_options = {'UNDO'}
 
     _timer = None
@@ -30,17 +30,15 @@ class RenderBatch(bpy.types.Operator):
 
     def execute(self, context):
         scene = context.scene
-        ob = func.get_object()
-        hbbs = func.get_hbbs(ob)
         props = func.get_props()
+        tokens = func.get_tokens()
 
         start = props.render_from
-        end = min(props.render_to, len(hbbs))
+        end = props.render_to
 
         self.stop = False
         self.rendering = False
-        self.shots = [(hbb.day, hbb.edition) for hbb in hbbs]
-        # print(self.shots)
+        self.shots = [tk for tk in tokens if tk.index >= start and tk.index <= end]
 
         # reset render path
         self.path = scene.render.filepath
@@ -57,8 +55,6 @@ class RenderBatch(bpy.types.Operator):
     
     def modal(self, context, event):
         scene = context.scene
-        ob = func.get_object()
-        hbbs = func.get_hbbs(ob)
         props = func.get_props()
 
         if event.type == 'TIMER':
@@ -77,15 +73,19 @@ class RenderBatch(bpy.types.Operator):
                 # assign shot and start rendering
                 scene = context.scene
                 shot = self.shots[0]
-                print(shot)
+                print(f"Current shot is {shot.index}")
                 # scene.render.filepath = f"{self.path}_{str(shot[1]).zfill(2)}_{str(shot[0]).zfill(5)}"
                 # scene.render.filepath = f"{self.path}_{func.generate_hbb_name(shot[0], shot[1])}"
-                scene.render.filepath = os.path.join(self.path, func.generate_hbb_name(shot[0], shot[1]))
-                props.current_hbb_index = func.get_hbb_index(shot[0], shot[1])
+                # scene.render.filepath = os.path.join(self.path, func.generate_hbb_name(shot[0], shot[1]))
+                # props.current_hbb_index = func.get_hbb_index(shot[0], shot[1])
                 # props.current_day = shot[1]
+                scene.render.filepath = f"{self.path}_{str(shot.index).zfill(5)}"
+                print(scene.render.filepath)
+                props.active_token_id = shot.index
 
                 # start rendering
                 bpy.ops.render.render("INVOKE_DEFAULT", write_still=True)
+                print(f"Rendering ")
 
                 
 

@@ -262,7 +262,7 @@ class RenderPanel(bpy.types.Panel):
         col.prop(props, "render_from")
         col.prop(props, "render_to")
         col = layout.column()
-        col.operator("nftgen.dummy", text="Render", icon="RENDERLAYERS")
+        col.operator("nftgen.render", text="Render", icon="RENDERLAYERS")
 
 class StatsPanel(bpy.types.Panel):
     bl_label = "Tokens Stats"
