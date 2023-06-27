@@ -45,9 +45,10 @@ class GenerateTokens(bpy.types.Operator):
             props = func.get_props()
 
             # update the tokens global prop
-            for element in self.tokens:
+            for i, element in enumerate(self.tokens):
                 new_token = tokens.add()
                 new_token.attributes = element
+                new_token.index = i
 
             # navigate to the first token in the stack
             # and switch to edit tab
