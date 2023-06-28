@@ -101,7 +101,7 @@ class NFTGenProps(bpy.types.PropertyGroup):
         items= [
             ("0", "Generate", "Generate", '', 0),
             ("1", "Edit", "Edit", '', 1), 
-            ("2", "Render", "Render", '', 2)
+            ("2", "Export", "Export", '', 2)
         ],
         default= '0'
     )
