@@ -70,7 +70,7 @@ class GenerateTokens(bpy.types.Operator):
         
 
         # generate the tokens here
-        print(f"{len(self.tokens)}")
+        # print(f"{len(self.tokens)}")
         traits = func.get_traits()
         token_set = set(self.tokens)
 
