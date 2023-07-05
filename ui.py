@@ -220,7 +220,7 @@ class RulesPanel(bpy.types.Panel):
     @classmethod
     def poll(cls, context):
         props = func.get_props()
-        return props.mode in ['0', '1']
+        return props.mode in ['0']
 
     def draw(self, context):
         scene = context.scene
@@ -240,8 +240,8 @@ class RulesPanel(bpy.types.Panel):
         sub.operator("nftgen.up_rule", icon='TRIA_UP', text="")
         sub.operator("nftgen.down_rule", icon='TRIA_DOWN', text="")
 
-class RenderPanel(bpy.types.Panel):
-    bl_label = "Render"
+class ExportPanel(bpy.types.Panel):
+    bl_label = "Export"
     bl_idname = "OBJECT_PT_render"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
@@ -259,10 +259,34 @@ class RenderPanel(bpy.types.Panel):
         layout = self.layout
         col = layout.column(align=True)
 
-        col.prop(props, "render_from")
-        col.prop(props, "render_to")
+        col.prop(props, "export_from", text="From")
+        col.prop(props, "export_to", text="To")
         col = layout.column()
         col.operator("nftgen.render", text="Render", icon="RENDERLAYERS")
+        col.operator("nftgen.render", text="Export Metadata", icon="TEXT")
+
+class OutputPanel(bpy.types.Panel):
+    bl_label = "Output"
+    bl_idname = "OBJECT_PT_output"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = 'NFT Generator'
+
+    @classmethod
+    def poll(cls, context):
+        props = func.get_props()
+        tokens = func.get_tokens()
+        return props.mode == "2" and tokens
+
+    def draw(self, context):
+        scene = context.scene
+        props = func.get_props()
+        layout = self.layout
+        col = layout.column(align=True)
+        col.prop(scene.render.image_settings, "file_format")
+        col.prop(props, "output_dir")
+
+        # start from 1
 
 class StatsPanel(bpy.types.Panel):
     bl_label = "Tokens Stats"
@@ -314,7 +338,8 @@ classes = (
     TraitsPanel, 
     RULES_UL_items, 
     RulesPanel, 
-    RenderPanel, 
+    OutputPanel, 
+    ExportPanel, 
     StatsPanel
 )
 

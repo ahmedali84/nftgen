@@ -112,16 +112,22 @@ class NFTGenProps(bpy.types.PropertyGroup):
         default=1
     )
 
-    # render props
-    render_from: bpy.props.IntProperty(
-        name="Render From", 
+    # render/export props
+    export_from: bpy.props.IntProperty(
+        name="From", 
         min=0, 
         default=0
     )
-    render_to: bpy.props.IntProperty(
-        name="Render To", 
+    export_to: bpy.props.IntProperty(
+        name="To", 
         min=0, 
         default=0
+    )
+
+    output_dir: bpy.props.StringProperty(
+        name="Output Folder", 
+        default="//", 
+        subtype="DIR_PATH"
     )
 
 class Token(bpy.types.PropertyGroup):
