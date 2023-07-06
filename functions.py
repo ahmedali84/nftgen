@@ -236,3 +236,27 @@ def export_json(metadata_dir, metadata, i):
     json_filepath = os.path.join(metadata_dir, f"{i}.json")
     with open(json_filepath, "w") as output:
         json.dump(metadata, output, indent=4)
+
+
+def get_render_ext():
+    """Get the file extension for output render"""
+    scene = bpy.context.scene
+    file_format = scene.render.image_settings.file_format
+
+    if file_format in ['AVI_JPEG', 'AVI_RAW', 'FFMPEG']:
+        ext = {
+            'MPEG1': 'mpeg1',
+            'MPEG2': 'mpeg2',
+            'MPEG4': 'mp4',
+            'AVI': 'avi',
+            'QUICKTIME': 'mov',
+            'DV': 'dv',
+            'OGG': 'ogg',
+            'MKV': 'mkv',
+            'FLASH': 'flv',
+            'WEBM': 'webm'
+        }
+        return '.' + ext[bpy.context.scene.render.ffmpeg.format]
+    
+    else:
+        return scene.render.file_extension

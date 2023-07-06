@@ -21,7 +21,7 @@ class ExportMetadata(bpy.types.Operator):
         end = props.export_to
 
         metadata_dir = func.get_metadata_export_folder()
-        render_file_ext = context.scene.render.file_extension
+        render_file_ext = func.get_render_ext()
 
         # get the token attributes dictionary
         for i in range(start, end + 1):
