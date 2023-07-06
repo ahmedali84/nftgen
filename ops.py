@@ -3,6 +3,7 @@ import os
 import json
 from . import functions as func
 from .render import RenderBatch
+from .metadata import ExportMetadata
 
 class Dummy(bpy.types.Operator):
     bl_idname = "nftgen.dummy"
@@ -234,6 +235,7 @@ classes = (
     RemoveTraitValue, 
     ClearTraitValues, 
     RenderBatch, 
+    ExportMetadata, 
     ClearTokens, 
     AddRule, 
     RemoveRule, 

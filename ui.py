@@ -263,7 +263,7 @@ class ExportPanel(bpy.types.Panel):
         col.prop(props, "export_to", text="To")
         col = layout.column()
         col.operator("nftgen.render", text="Render", icon="RENDERLAYERS")
-        col.operator("nftgen.render", text="Export Metadata", icon="TEXT")
+        col.operator("nftgen.export_metadata", icon="TEXT")
 
 class OutputPanel(bpy.types.Panel):
     bl_label = "Output"

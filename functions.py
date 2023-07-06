@@ -4,6 +4,7 @@ import random
 import json
 from math import prod
 from collections import Counter
+import os
 
 def get_props():
     return bpy.context.scene.nftgen
@@ -205,3 +206,33 @@ def generate_token_data(traits):
         token_data[tt.name] = choice
 
     return token_data
+
+def get_id_name_dict():
+    """Return a dictionary of id: metadata_name for all traits and trait values"""
+    traits = get_traits()
+    traits_values = get_traits_values()
+
+    id_name_dict = {}
+    for t in traits:
+        id_name_dict[t.name] = t.metadata_name
+
+    for t in traits_values:
+        id_name_dict[t.name] = t.metadata_name
+
+    return id_name_dict
+
+def get_metadata_export_folder():
+    """Get metadata export folder, create if not exist"""
+    props = get_props()
+    output_dir = bpy.path.abspath(props.output_dir)
+    metadata_dir = os.path.join(output_dir, "metadata")
+    if not os.path.exists(metadata_dir):
+        os.makedirs(metadata_dir)
+    
+    return metadata_dir
+
+def export_json(metadata_dir, metadata, i):
+    """Export json file to the designated folder with the id as a name"""
+    json_filepath = os.path.join(metadata_dir, f"{i}.json")
+    with open(json_filepath, "w") as output:
+        json.dump(metadata, output, indent=4)
