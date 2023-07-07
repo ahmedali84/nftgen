@@ -20,7 +20,7 @@ class ExportMetadata(bpy.types.Operator):
         start = props.export_from
         end = props.export_to
 
-        metadata_dir = func.get_metadata_export_folder()
+        metadata_dir = func.get_export_folder("metadata")
         render_file_ext = func.get_render_ext()
 
         # get the token attributes dictionary

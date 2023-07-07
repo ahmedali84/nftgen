@@ -221,19 +221,19 @@ def get_id_name_dict():
 
     return id_name_dict
 
-def get_metadata_export_folder():
+def get_export_folder(name):
     """Get metadata export folder, create if not exist"""
     props = get_props()
     output_dir = bpy.path.abspath(props.output_dir)
-    metadata_dir = os.path.join(output_dir, "metadata")
-    if not os.path.exists(metadata_dir):
-        os.makedirs(metadata_dir)
+    export_dir = os.path.join(output_dir, name)
+    if not os.path.exists(export_dir):
+        os.makedirs(export_dir)
     
-    return metadata_dir
+    return export_dir
 
-def export_json(metadata_dir, metadata, i):
+def export_json(export_dir, metadata, i):
     """Export json file to the designated folder with the id as a name"""
-    json_filepath = os.path.join(metadata_dir, f"{i}.json")
+    json_filepath = os.path.join(export_dir, f"{i}.json")
     with open(json_filepath, "w") as output:
         json.dump(metadata, output, indent=4)
 
