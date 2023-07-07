@@ -213,6 +213,10 @@ class GeneratePanel(bpy.types.Panel):
         col.prop(props, "tokens_count")
         col.operator("nftgen.generate_tokens", text="Generate", icon="FILE_REFRESH")
 
+        max_unique_tokens = func.max_unique_tokens()
+        if props.tokens_count >= max_unique_tokens:
+            col.label(text=f"Warning: Max unique tokens = {max_unique_tokens}")
+
 class RulesPanel(bpy.types.Panel):
     bl_label = "Rules"
     bl_idname = "OBJECT_PT_rules"
