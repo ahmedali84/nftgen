@@ -227,6 +227,27 @@ class DownRule(bpy.types.Operator):
         props.active_rule_id += 1
         return {'FINISHED'}
 
+class OpenOutputDir(bpy.types.Operator):
+    bl_idname = "nftgen.open_output_dir"
+    bl_label = "Open Output Folder"
+    bl_description = "Open Output Folder in File Explorer"
+    bl_options = {'UNDO'}
+
+    @classmethod
+    def poll(cls, context):
+        # check if output folder exists
+        props = func.get_props()
+        output_dir = bpy.path.abspath(props.output_dir)
+        
+        return os.path.exists(output_dir)
+
+    def execute(self, context):
+        props = func.get_props()
+        output_dir = bpy.path.abspath(props.output_dir)
+
+        os.startfile(output_dir)
+        return {'FINISHED'}
+
 classes = (
     Dummy, 
     AddTrait, 
@@ -240,7 +261,8 @@ classes = (
     AddRule, 
     RemoveRule, 
     UpRule, 
-    DownRule
+    DownRule, 
+    OpenOutputDir
 )
 
 def register():

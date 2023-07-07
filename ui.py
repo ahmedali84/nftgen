@@ -285,6 +285,8 @@ class OutputPanel(bpy.types.Panel):
         col = layout.column(align=True)
         col.prop(scene.render.image_settings, "file_format")
         col.prop(props, "output_dir")
+        col.separator()
+        col.operator("nftgen.open_output_dir")
 
         # start from 1
 
