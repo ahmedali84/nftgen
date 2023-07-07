@@ -308,7 +308,8 @@ class StatsPanel(bpy.types.Panel):
     @classmethod
     def poll(cls, context):
         props = func.get_props()
-        return props.mode == "1"
+        tokens = func.get_tokens()
+        return props.mode == "1" and bool(tokens)
 
     def draw(self, context):
         traits = func.get_traits()
