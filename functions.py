@@ -237,7 +237,6 @@ def export_json(export_dir, metadata, i):
     with open(json_filepath, "w") as output:
         json.dump(metadata, output, indent=4)
 
-
 def get_render_ext():
     """Get the file extension for output render"""
     scene = bpy.context.scene
@@ -260,3 +259,15 @@ def get_render_ext():
     
     else:
         return scene.render.file_extension
+    
+def traits_updated():
+    """Compare traits to active token traits to detect any change in traits
+    that requires re-generating the tokens"""
+    tokens = get_tokens()
+    traits = get_traits()
+    active_token_props = get_active_token_props()
+
+    traits_list = tuple([t.name for t in traits])
+    active_token_list = tuple([prop.trait for prop in active_token_props])
+
+    return all([bool(tokens), hash(traits_list) != hash(active_token_list)])

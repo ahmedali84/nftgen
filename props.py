@@ -150,6 +150,12 @@ class NFTGenProps(bpy.types.PropertyGroup):
         subtype="DIR_PATH"
     )
 
+    # only true if traits order has been changed
+    # or new traits have been added/removed
+    traits_updated: bpy.props.BoolProperty(
+        default=False
+    )
+
 class Token(bpy.types.PropertyGroup):
     index: bpy.props.IntProperty(
         name="Index", 

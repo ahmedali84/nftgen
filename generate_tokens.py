@@ -31,6 +31,7 @@ class GenerateTokens(bpy.types.Operator):
         self.tokens_count = props.tokens_count
         self.progress = 0
         props.generate_progress = 0
+        props.traits_updated = False
 
         self.report({'INFO'}, message=f"Generating Tokens")
 

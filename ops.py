@@ -38,6 +38,8 @@ class AddTrait(bpy.types.Operator):
         idx = traits.find(new_trait.name)
         print(idx)
         props.active_trait_id = idx
+
+        props.traits_updated = func.traits_updated()
         return {'FINISHED'}
 
 class RemoveTrait(bpy.types.Operator):
@@ -60,6 +62,7 @@ class RemoveTrait(bpy.types.Operator):
 
         props.active_trait_id = max(0, active_trait_id - 1)
         print(active_trait_id)
+        props.traits_updated = func.traits_updated()
         return {'FINISHED'}
 
 class AddTraitValue(bpy.types.Operator):
@@ -137,6 +140,10 @@ class ClearTokens(bpy.types.Operator):
     def execute(self, context):
         tokens = func.get_tokens()
         tokens.clear()
+
+        # clear active token collection props
+        active_token_props = func.get_active_token_props()
+        active_token_props.clear()
 
         # go back to the generate panel
         props = func.get_props()
@@ -267,6 +274,11 @@ class UpTrait(bpy.types.Operator):
 
         traits.move(props.active_trait_id, props.active_trait_id - 1)
         props.active_trait_id -= 1
+
+        # set prop.traits_order_updated
+        # to add warning in export panel in case traits order has been changed
+        # after tokens were generated
+        props.traits_updated = func.traits_updated()
         return {'FINISHED'}
     
 class DownTrait(bpy.types.Operator):
@@ -288,6 +300,8 @@ class DownTrait(bpy.types.Operator):
 
         traits.move(props.active_trait_id, props.active_trait_id + 1)
         props.active_trait_id += 1
+
+        props.traits_updated = func.traits_updated()
         return {'FINISHED'}
 
 classes = (

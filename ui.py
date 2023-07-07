@@ -269,6 +269,9 @@ class ExportPanel(bpy.types.Panel):
         col.operator("nftgen.render", text="Render", icon="RENDERLAYERS")
         col.operator("nftgen.export_metadata", icon="TEXT")
 
+        if props.traits_updated:
+            col.label(text="Warning: traits order change will not be reflected in metadata unless tokens are re-generated")
+
 class OutputPanel(bpy.types.Panel):
     bl_label = "Output"
     bl_idname = "OBJECT_PT_output"
