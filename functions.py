@@ -271,3 +271,12 @@ def traits_updated():
     active_token_list = tuple([prop.trait for prop in active_token_props])
 
     return all([bool(tokens), hash(traits_list) != hash(active_token_list)])
+
+def sum_rarities(trait):
+    """Check if the given trait has sum(rarities) == 0
+    since this case causes an issue with the random generation function"""
+    all_traits_values = get_traits_values()
+    trait_rarities = [
+        tv.rarity for tv in all_traits_values if tv.trait_id == trait.name
+    ]
+    return sum(trait_rarities)
