@@ -248,6 +248,48 @@ class OpenOutputDir(bpy.types.Operator):
         os.startfile(output_dir)
         return {'FINISHED'}
 
+class UpTrait(bpy.types.Operator):
+    bl_idname = "nftgen.up_trait"
+    bl_label = "Up"
+    bl_description = "Move selected trait up"
+    bl_options = {'UNDO'}
+
+    @classmethod
+    def poll(cls, context):
+        props = func.get_props()
+        traits = func.get_traits()
+        
+        return bool(traits) and props.active_trait_id > 0
+
+    def execute(self, context):
+        props = func.get_props()
+        traits = func.get_traits()
+
+        traits.move(props.active_trait_id, props.active_trait_id - 1)
+        props.active_trait_id -= 1
+        return {'FINISHED'}
+    
+class DownTrait(bpy.types.Operator):
+    bl_idname = "nftgen.down_trait"
+    bl_label = "Down"
+    bl_description = "Move selected trait down"
+    bl_options = {'UNDO'}
+
+    @classmethod
+    def poll(cls, context):
+        traits = func.get_traits()
+        props = func.get_props()
+        
+        return bool(traits) and props.active_trait_id < len(traits) - 1
+
+    def execute(self, context):
+        props = func.get_props()
+        traits = func.get_traits()
+
+        traits.move(props.active_trait_id, props.active_trait_id + 1)
+        props.active_trait_id += 1
+        return {'FINISHED'}
+
 classes = (
     Dummy, 
     AddTrait, 
@@ -262,7 +304,9 @@ classes = (
     RemoveRule, 
     UpRule, 
     DownRule, 
-    OpenOutputDir
+    OpenOutputDir, 
+    UpTrait, 
+    DownTrait
 )
 
 def register():

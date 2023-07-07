@@ -175,6 +175,10 @@ class TraitsPanel(bpy.types.Panel):
         sub = row.column(align= True)
         sub.operator("nftgen.add_trait", icon='ADD', text="")
         sub.operator("nftgen.remove_trait", icon='REMOVE', text="")
+        sub.separator()
+        sub.operator("nftgen.up_trait", icon='TRIA_UP', text="")
+        sub.operator("nftgen.down_trait", icon='TRIA_DOWN', text="")
+
 
         col.label(text= "Trait Values:")
         row = col.row()
