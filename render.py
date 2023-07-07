@@ -74,9 +74,7 @@ class RenderBatch(bpy.types.Operator):
                 # assign shot and start rendering
                 scene = context.scene
                 shot = self.shots[0]
-                # scene.render.filepath = f"{self.path}_{str(shot.index)}"
-                scene.render.filepath = f"{self.path}{str(shot.index)}"
-                print(self.path)
+                scene.render.filepath = os.path.join(self.path, str(shot.index))
                 props.active_token_id = shot.index
 
                 # start rendering
