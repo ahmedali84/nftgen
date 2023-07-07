@@ -33,16 +33,17 @@ class RenderBatch(bpy.types.Operator):
         props = func.get_props()
         tokens = func.get_tokens()
 
-        start = props.render_from
-        end = props.render_to
+        start = props.export_from
+        end = props.export_to
 
         self.stop = False
         self.rendering = False
         self.shots = [tk for tk in tokens if tk.index >= start and tk.index <= end]
 
-        # reset render path
-        self.path = scene.render.filepath
-        
+        # to be able to reset filepath later
+        self.original_path = scene.render.filepath
+        self.path = func.get_export_folder("render")
+
         bpy.app.handlers.render_pre.append(self.pre)
         bpy.app.handlers.render_post.append(self.post)
         bpy.app.handlers.render_cancel.append(self.cancelled)
@@ -66,27 +67,18 @@ class RenderBatch(bpy.types.Operator):
                 context.window_manager.event_timer_remove(self._timer)
 
                 # reset render filepath
-                scene.render.filepath = self.path
+                scene.render.filepath = self.original_path
                 return {'FINISHED'}
             
             elif not self.rendering:
                 # assign shot and start rendering
                 scene = context.scene
                 shot = self.shots[0]
-                print(f"Current shot is {shot.index}")
-                # scene.render.filepath = f"{self.path}_{str(shot[1]).zfill(2)}_{str(shot[0]).zfill(5)}"
-                # scene.render.filepath = f"{self.path}_{func.generate_hbb_name(shot[0], shot[1])}"
-                # scene.render.filepath = os.path.join(self.path, func.generate_hbb_name(shot[0], shot[1]))
-                # props.current_hbb_index = func.get_hbb_index(shot[0], shot[1])
-                # props.current_day = shot[1]
-                scene.render.filepath = f"{self.path}_{str(shot.index).zfill(5)}"
-                print(scene.render.filepath)
+                # scene.render.filepath = f"{self.path}_{str(shot.index)}"
+                scene.render.filepath = f"{self.path}{str(shot.index)}"
+                print(self.path)
                 props.active_token_id = shot.index
 
                 # start rendering
                 bpy.ops.render.render("INVOKE_DEFAULT", write_still=True)
-                print(f"Rendering ")
-
-                
-
         return {'PASS_THROUGH'}
