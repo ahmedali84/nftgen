@@ -34,6 +34,22 @@ def active_token_set(self, value):
 def active_token_get(self):
     return self.get('active_token_id', 0)
 
+def export_from_set(self, value):
+    tokens = func.get_tokens()
+    new_value = min(max(0, value), len(tokens) - 1)
+    self['export_from'] = new_value
+
+def export_from_get(self):
+    return self.get('export_from', 0)
+
+def export_to_set(self, value):
+    tokens = func.get_tokens()
+    new_value = min(max(0, value), len(tokens) - 1)
+    self['export_to'] = new_value
+
+def export_to_get(self):
+    return self.get('export_to', 0)
+
 def rules_items(scene, context):
     traits_values = func.get_traits_values()
 
@@ -116,12 +132,16 @@ class NFTGenProps(bpy.types.PropertyGroup):
     export_from: bpy.props.IntProperty(
         name="From", 
         min=0, 
-        default=0
+        default=0, 
+        get=export_from_get, 
+        set=export_from_set
     )
     export_to: bpy.props.IntProperty(
         name="To", 
         min=0, 
-        default=0
+        default=0, 
+        get=export_to_get, 
+        set=export_to_set
     )
 
     output_dir: bpy.props.StringProperty(
