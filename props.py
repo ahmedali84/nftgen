@@ -3,14 +3,18 @@ from . import functions as func
 import json
 
 def active_trait_id_update(self, context):
-    all_trait_values = func.get_traits_values()
-
-    # get the relevant trait values
-    for tv in all_trait_values:
-        if tv.trait_id == self.active_trait_id:
-            idx = all_trait_values.find(tv.name)
-            self.active_trait_value_id = idx
-            return
+    traits = func.get_traits()
+    all_trait_values = [
+        tv for tv in func.get_traits_values()
+    ]
+        
+    # get the last relevant trait value in the list
+    relevant_trait_values = [
+        tv for tv in all_trait_values if tv.trait_id  == traits[self.active_trait_id].name
+    ]
+    if relevant_trait_values:
+        print(all_trait_values.index(relevant_trait_values[-1]))
+        self.active_trait_value_id = all_trait_values.index(relevant_trait_values[-1])
         
 def collection_object_update(self, context):
     if self.object_ and not self.metadata_name:
