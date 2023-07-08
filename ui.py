@@ -301,6 +301,29 @@ class OutputPanel(bpy.types.Panel):
 
         # start from 1
 
+class MetadataPanel(bpy.types.Panel):
+    bl_label = "Token Metadata"
+    bl_idname = "OBJECT_PT_tkmetadata"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category= 'NFT Generator'
+    bl_parent_id= 'OBJECT_PT_output'
+
+    @classmethod
+    def poll(cls, context):
+        props = func.get_props()
+        return props.mode == '2'
+
+    def draw(self, context):
+        props = func.get_props()
+
+        layout = self.layout
+        col = layout.column()
+        col.prop(props, "description")
+        col.prop(props, "external_url")
+        col.prop(props, "token_name")
+        col.prop(props, "image_url")
+
 class StatsPanel(bpy.types.Panel):
     bl_label = "Tokens Stats"
     bl_idname = "OBJECT_PT_stats"
@@ -354,7 +377,8 @@ classes = (
     RulesPanel, 
     OutputPanel, 
     ExportPanel, 
-    StatsPanel
+    StatsPanel, 
+    MetadataPanel
 )
 
 def register():

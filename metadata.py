@@ -17,6 +17,14 @@ class ExportMetadata(bpy.types.Operator):
         props = func.get_props()
         tokens = func.get_tokens()
 
+        # check if # exists in token name and image url
+        hash_symbol_exists = all([
+            "#" in props.token_name, 
+            "#" in props.image_url
+        ])
+        if not hash_symbol_exists:
+            self.report(type={'WARNING'}, message="Token Name and Image URL must include a # symbol")
+
         start = props.export_from
         end = props.export_to
 
@@ -45,14 +53,12 @@ class ExportMetadata(bpy.types.Operator):
             ]
 
             metadata = {
+                "description": props.description,
+                "external_url": props.external_url,
+                "image": props.image_url.replace("#", f"{i}{render_file_ext}"), 
+                "name": props.token_name.replace("#", str(i)), 
                 "attributes": attributes,
-                "description": "My project is awesome!",
-                "external_url": f"https://my_url.nft",
-                "image": f"{i}{render_file_ext}", 
-                "name": f"{i}"
             }
 
             func.export_json(metadata_dir, metadata, i)
-
-        # get the metadata export folder
         return {'FINISHED'}

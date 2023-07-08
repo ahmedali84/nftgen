@@ -156,6 +156,31 @@ class NFTGenProps(bpy.types.PropertyGroup):
         default=False
     )
 
+    # Additional metadata props
+    description: bpy.props.StringProperty(
+        name="Description", 
+        description="Description of Project", 
+        default=""
+    )
+
+    external_url: bpy.props.StringProperty(
+        name="External URL", 
+        description="URL for the Project Homepage", 
+        default=""
+    )
+
+    token_name: bpy.props.StringProperty(
+        name="Token Name", 
+        description="Token Name, # symbol resembles token index/id", 
+        default="#"
+    )
+
+    image_url:bpy.props.StringProperty(
+        name="Image URL", 
+        description="URL of the token image, # symbol resembles token index/id", 
+        default="#"
+    )
+
 class Token(bpy.types.PropertyGroup):
     index: bpy.props.IntProperty(
         name="Index", 
