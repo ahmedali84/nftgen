@@ -56,12 +56,12 @@ class RemoveTrait(bpy.types.Operator):
         props = func.get_props()
         traits = func.get_traits()
 
-        active_trait_id = props.active_trait_id
-        func.remove_trait_values(active_trait_id)
-        traits.remove(active_trait_id)
+        active_trait_index = props.active_trait_id
+        func.remove_trait_values(active_trait_index)
+        traits.remove(active_trait_index)
 
-        props.active_trait_id = max(0, active_trait_id - 1)
-        print(active_trait_id)
+        props.active_trait_id = max(0, active_trait_index - 1)
+        print(active_trait_index)
         props.traits_updated = func.traits_updated()
         return {'FINISHED'}
 
@@ -79,11 +79,14 @@ class AddTraitValue(bpy.types.Operator):
         props = func.get_props()
         traits = func.get_traits()
         trait_values = func.get_traits_values()
-        active_trait_id = props.active_trait_id
+        active_trait_index = props.active_trait_id
 
         new_trait_value = trait_values.add()
         new_trait_value.name = func.generate_random_id()
-        new_trait_value.trait_id = traits[active_trait_id].name
+        new_trait_value.trait_id = traits[active_trait_index].name
+
+        trait_values = [tv for tv in trait_values]
+        props.active_trait_value_id = trait_values.index(new_trait_value)
         return {'FINISHED'}
 
 class RemoveTraitValue(bpy.types.Operator):
@@ -94,16 +97,28 @@ class RemoveTraitValue(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        return True
+        props = func.get_props()
+        active_trait_index = props.active_trait_id
+        traits = func.get_traits()
+        active_trait = traits[active_trait_index]
+        traits_values = func.get_traits_values()
+        return bool([tv for tv in traits_values if tv.trait_id == active_trait.name])
 
     def execute(self, context):
         props = func.get_props()
-        trait_values = func.get_traits_values()
+        traits_values = func.get_traits_values()
         active_trait_value_id = props.active_trait_value_id
+        active_trait_value = traits_values[active_trait_value_id]
+        candidate_tv = func.get_candidate_tv(active_trait_value)
+        # print(f"Next tv= {candidate_tv.metadata_name}")
 
-        trait_values.remove(active_trait_value_id)
-
-        active_trait_value_id = max(0, active_trait_value_id - 1)
+        traits_values.remove(active_trait_value_id)
+        
+        if candidate_tv:
+            traits_values = func.get_traits_values()
+            props.active_trait_value_id = traits_values.find(candidate_tv)
+        else:
+            props.active_trait_value_id = 0
         return {'FINISHED'}
     
 class ClearTraitValues(bpy.types.Operator):
@@ -118,10 +133,10 @@ class ClearTraitValues(bpy.types.Operator):
 
     def execute(self, context):
         props = func.get_props()
-        active_trait_id = props.active_trait_id
+        active_trait_index = props.active_trait_id
         traits = func.get_traits()
 
-        func.remove_trait_values(traits[active_trait_id].name)
+        func.remove_trait_values(traits[active_trait_index].name)
 
         # props.active_trait_value_id = 0
         return {'FINISHED'}

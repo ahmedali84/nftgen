@@ -280,3 +280,26 @@ def sum_rarities(trait):
         tv.rarity for tv in all_traits_values if tv.trait_id == trait.name
     ]
     return sum(trait_rarities)
+
+def get_candidate_tv(trait_value):
+    """Get the index of the next candidate trait value after removing the trait_value
+    in function input"""
+    # get preceding and secceeding tvs in the active trait
+    active_trait_id = trait_value.trait_id
+
+    traits_values = get_traits_values()
+    active_trait_values = [tv for tv in traits_values if tv.trait_id == active_trait_id]
+    active_trait_value_index = active_trait_values.index(trait_value)
+
+    upper_tv_index = max(0, active_trait_value_index - 1 )
+    lower_tv_index = min(len(active_trait_values) - 1, active_trait_value_index + 1)
+
+    if len(active_trait_values) == 1:
+        # the only trait value in the list
+        return None
+    
+    if upper_tv_index == active_trait_value_index == 0:
+        # active trait value is the first one in the list
+        return active_trait_values[lower_tv_index].name
+    else:
+        return active_trait_values[upper_tv_index].name

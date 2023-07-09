@@ -13,7 +13,7 @@ def active_trait_id_update(self, context):
         tv for tv in all_trait_values if tv.trait_id  == traits[self.active_trait_id].name
     ]
     if relevant_trait_values:
-        print(all_trait_values.index(relevant_trait_values[-1]))
+        # print(all_trait_values.index(relevant_trait_values[-1]))
         self.active_trait_value_id = all_trait_values.index(relevant_trait_values[-1])
         
 def collection_object_update(self, context):
