@@ -13,6 +13,7 @@ class GenerateTokens(bpy.types.Operator):
     tokens = []
     tokens_count = 0
     progress = 0
+    time_elapsed = 0
     
 
     @classmethod
@@ -22,7 +23,6 @@ class GenerateTokens(bpy.types.Operator):
         return props.tokens_count <= max_unique_tokens
 
     def execute(self, context):
-        print("execute")
         props = func.get_props()
         tokens = func.get_tokens()
         traits = func.get_traits()
@@ -75,11 +75,15 @@ class GenerateTokens(bpy.types.Operator):
 
             return {'FINISHED'} 
 
-        # if event.type == 'TIMER':
-        #     self.report({'INFO'}, message=f"Generated {self.progress}%")
+        if event.type == 'TIMER':
+            if self.time_elapsed % 100 == 0:
+                progress = int(
+                len(self.tokens) / self.tokens_count * 100
+                )
+                # self.report every second anyway
+                self.report({'INFO'}, message=f"Generated {progress}%")
 
         if event.type == 'ESC':
-            print("Cancel")
             self.report({'WARNING'}, message=f"Canecelled")
             context.window_manager.event_timer_remove(self.timer)
             return {'CANCELLED'}
@@ -102,10 +106,12 @@ class GenerateTokens(bpy.types.Operator):
                 len(self.tokens) / self.tokens_count * 100
             )
 
-            if progress > self.progress:
-                self.report({'INFO'}, message=f"Generated {progress}%")
-                self.progress = progress
+            # if progress > self.progress:
+            #     self.report({'INFO'}, message=f"Generated {progress}%")
+            #     self.progress = progress
+            #     print(f"Time elapsed= {self.time_elapsed}")
 
+        self.time_elapsed += 1
         return {'PASS_THROUGH'}
 
 
