@@ -14,7 +14,6 @@ class GenerateTokens(bpy.types.Operator):
     tokens_count = 0
     progress = 0
     time_elapsed = 0
-    
 
     @classmethod
     def poll(cls, context):
@@ -39,7 +38,6 @@ class GenerateTokens(bpy.types.Operator):
                 {'WARNING'}, message=f"{', '.join(problematic_traits_names)} total rarities must be greater than zero"
             )
             return {'CANCELLED'}
-
 
         tokens.clear()
 
@@ -87,14 +85,12 @@ class GenerateTokens(bpy.types.Operator):
             self.report({'WARNING'}, message=f"Canecelled")
             context.window_manager.event_timer_remove(self.timer)
             return {'CANCELLED'}
-        
 
         # generate the tokens here
-        # print(f"{len(self.tokens)}")
         traits = func.get_traits()
         token_set = set(self.tokens)
 
-        token_data = {}
+        # token_data = {}
         token_data = func.generate_token_data(traits)
         token_data = func.apply_rules(token_data)
 
@@ -102,50 +98,41 @@ class GenerateTokens(bpy.types.Operator):
             token_data = json.dumps(token_data)
             token_set.add(token_data)
             self.tokens = list(token_set)
-            progress = int(
-                len(self.tokens) / self.tokens_count * 100
-            )
-
-            # if progress > self.progress:
-            #     self.report({'INFO'}, message=f"Generated {progress}%")
-            #     self.progress = progress
-            #     print(f"Time elapsed= {self.time_elapsed}")
 
         self.time_elapsed += 1
         return {'PASS_THROUGH'}
 
+class FeelingLucky(bpy.types.Operator):
+    bl_idname = "nftgen.feeling_lucky"
+    bl_label = "I'm Feeling Lucky"
+    bl_description = "Generate a Random Values for active token"
+    bl_options = {'UNDO'}
 
-
-    # def execute(self, context):
-    #     props = func.get_props()
-    #     traits = func.get_traits()
-    #     tokens = func.get_tokens()
-
-    #     # clear existing tokens list
-    #     tokens.clear()
+    @classmethod
+    def poll(cls, context):
+        traits = func.get_traits()
+        tokens = func.get_tokens()
         
-    #     # randomly generate new unique tokens
-    #     token_set = set()
+        return bool(traits) and bool(tokens)
 
-    #     token_data = {}
-    #     token_data = func.generate_token_data(traits)
-    #     token_data = func.apply_rules(token_data)
+    def execute(self, context):
+        props = func.get_props()
+        traits = func.get_traits()
+        tokens = func.get_tokens()
+        active_token_index = props.active_token_id
+        active_token = tokens[active_token_index]
 
-    #     if token_data:
-    #         token_data = json.dumps(token_data)
-    #         token_set.add(token_data)
+        token_data = func.generate_token_data(traits)
+        active_token.attributes = json.dumps(token_data)
 
-    #     for element in token_set:
-    #         new_token = tokens.add()
-    #         new_token.attributes = element
+        # just to invoke the active token index update function
+        props.active_token_id = active_token_index
+        return {'FINISHED'}
 
-    #     # navigate to the first token in the stack
-    #     props.active_token_id = 0
-    #     props.mode = '1'
-    #     return {'FINISHED'}
-    
+
 classes = (
     GenerateTokens, 
+    FeelingLucky
 )
 
 def register():

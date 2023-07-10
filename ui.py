@@ -80,7 +80,9 @@ class TokenDetailsPanel(bpy.types.Panel):
                 row = col.row(align=False)
                 row.label(text=f"{traits[p.trait].metadata_name}:")
                 row.prop(p, "trait_value", text="")
-
+            
+            col.separator()
+            col.operator("nftgen.feeling_lucky", icon='MESH_ICOSPHERE')
 
 class TRAITS_UL_items(bpy.types.UIList):
     """The Slots UI list"""
