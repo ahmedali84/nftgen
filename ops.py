@@ -50,7 +50,8 @@ class RemoveTrait(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        return True
+        traits = func.get_traits()
+        return bool(traits)
 
     def execute(self, context):
         props = func.get_props()
