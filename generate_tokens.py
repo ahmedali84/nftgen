@@ -122,6 +122,19 @@ class FeelingLucky(bpy.types.Operator):
         active_token_index = props.active_token_id
         active_token = tokens[active_token_index]
 
+        # show warning when one trait has rarities sum = 0 
+        problematic_traits = [
+            trait for trait in traits if func.sum_rarities(trait) == 0
+        ]
+
+        if problematic_traits:
+            problematic_traits_names = [t.metadata_name for t in problematic_traits]
+
+            self.report(
+                {'WARNING'}, message=f"{', '.join(problematic_traits_names)} total rarities must be greater than zero"
+            )
+            return {'CANCELLED'}
+
         token_data = func.generate_token_data(traits)
         active_token.attributes = json.dumps(token_data)
 
