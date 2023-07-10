@@ -212,8 +212,8 @@ class Trait(bpy.types.PropertyGroup):
 
     value_type: bpy.props.EnumProperty(
         items= [
-            ("0", "Objects", "Objects", '', 0),
-            ("1", "Collections", "Collections", '', 1)
+            ("0", "Objects", "Objects", 'OBJECT_DATA', 0),
+            ("1", "Collections", "Collections", 'OUTLINER_COLLECTION', 1)
         ],
         default= '0'
     )
