@@ -57,11 +57,12 @@ class RemoveTrait(bpy.types.Operator):
         traits = func.get_traits()
 
         active_trait_index = props.active_trait_id
-        func.remove_trait_values(active_trait_index)
+        active_trait = traits[active_trait_index]
+        func.remove_trait_values(active_trait)
         traits.remove(active_trait_index)
 
         props.active_trait_id = max(0, active_trait_index - 1)
-        print(active_trait_index)
+        # print(active_trait_index)
         props.traits_updated = func.traits_updated()
         return {'FINISHED'}
 

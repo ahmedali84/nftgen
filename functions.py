@@ -24,11 +24,11 @@ def get_rules():
 def get_active_token_props():
     return bpy.context.scene.active_token_props
 
-def remove_trait_values(trait_name):
+def remove_trait_values(trait):
     trait_values = get_traits_values()
 
     names_to_remove = [
-        tv.name for tv in trait_values if tv.trait_id == trait_name
+        tv.name for tv in trait_values if tv.trait_id == trait.name
     ]
 
     for name in names_to_remove:
