@@ -102,8 +102,14 @@ class RemoveTraitValue(bpy.types.Operator):
         props = func.get_props()
         active_trait_index = props.active_trait_id
         traits = func.get_traits()
-        active_trait = traits[active_trait_index]
-        traits_values = func.get_traits_values()
+        
+        try:
+            active_trait = traits[active_trait_index]
+            traits_values = func.get_traits_values()
+
+        except IndexError:
+            return False
+        
         return bool([tv for tv in traits_values if tv.trait_id == active_trait.name])
 
     def execute(self, context):
