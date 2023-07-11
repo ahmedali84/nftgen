@@ -83,8 +83,9 @@ def active_token_tv_items(self, context):
         traits_values = func.get_traits_values()
 
         active_traits_values = [tv for tv in traits_values if tv.trait_id == self.trait]
-        for tv in active_traits_values:
-            items.append((tv.name, tv.metadata_name, ""))
+        if active_traits_values:
+            for tv in active_traits_values:
+                items.append((tv.name, tv.metadata_name, ""))
 
     return items
 

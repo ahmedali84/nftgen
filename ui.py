@@ -77,10 +77,15 @@ class TokenDetailsPanel(bpy.types.Panel):
 
             col = layout.column(align= True)
             for p in active_token_props:
+                trait_index = traits.find(p.trait)
                 row = col.row(align=False)
-                row.label(text=f"{traits[p.trait].metadata_name}:")
-                row.prop(p, "trait_value", text="")
-            
+                if trait_index == -1:
+                    row.label(text="This trait has been removed", icon='ERROR')
+                    
+                else:
+                    row.label(text=f"{traits[p.trait].metadata_name}:")
+                    row.prop(p, "trait_value", text="")
+                
             col.separator()
             col.operator("nftgen.feeling_lucky", icon='MESH_ICOSPHERE')
 
@@ -276,9 +281,6 @@ class ExportPanel(bpy.types.Panel):
         col = layout.column()
         col.operator("nftgen.render", text="Render", icon="RENDERLAYERS")
         col.operator("nftgen.export_metadata", icon="TEXT")
-
-        if props.traits_updated:
-            col.label(text="Warning: traits order change will not be reflected in metadata unless tokens are re-generated")
 
 class OutputPanel(bpy.types.Panel):
     bl_label = "Output"

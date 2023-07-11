@@ -63,7 +63,13 @@ def update_token(token_dict):
     traits_values = get_traits_values()
 
     for trait_name, trait_value_name in token_dict.items():
-        update_attribute(traits[trait_name], traits_values[trait_value_name])
+        trait_index = traits.find(trait_name)
+        trait_value_index = traits_values.find(trait_value_name)
+
+        if trait_index == -1 or trait_value_index == -1:
+            print("Unable to  update token, some properties have been removed!")
+        else:
+            update_attribute(traits[trait_name], traits_values[trait_value_name])
 
     # # hide all relevant objects/collections
     # relevant_objects = [
@@ -191,7 +197,10 @@ def set_active_token_props():
     for trait_id, trait_value_id in active_token_dict.items():
         new_token_prop = active_token_props.add()
         new_token_prop.trait = trait_id
-        new_token_prop.trait_value = trait_value_id
+        try:
+            new_token_prop.trait_value = trait_value_id
+        except:
+            pass
 
 def copy_active_token_props():
     active_token_props = get_active_token_props()
