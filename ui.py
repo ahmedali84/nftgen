@@ -108,7 +108,9 @@ class TRAITVALUES_UL_items(bpy.types.UIList):
         # the trait this value is instanciated from
         VALUE_TYPES = {
             '0': "object_", 
-            '1': "collection_"
+            '1': "collection_", 
+            '2': "material_", 
+            '3': "world_"
         }
         row.prop(item, VALUE_TYPES[trait.value_type], text="")
 

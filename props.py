@@ -24,10 +24,6 @@ def collection_object_update(self, context):
         self.metadata_name = self.collection_.name
 
 def active_token_update(self, context):
-    # tokens = func.get_tokens()
-    # token = tokens[self.active_token_id]
-    # token_dict = json.loads(token.attributes)
-    # func.update_token(token_dict)
     func.set_active_token_props()
 
 def active_token_set(self, value):
@@ -213,7 +209,9 @@ class Trait(bpy.types.PropertyGroup):
     value_type: bpy.props.EnumProperty(
         items= [
             ("0", "Objects", "Objects", 'OBJECT_DATA', 0),
-            ("1", "Collections", "Collections", 'OUTLINER_COLLECTION', 1)
+            ("1", "Collections", "Collections", 'OUTLINER_COLLECTION', 1), 
+            ("2", "Materials", "Materials", 'MATERIAL_DATA', 2),
+            ("3", "Worlds", "Worlds", 'WORLD_DATA', 3),
         ],
         default= '0'
     )
@@ -258,6 +256,16 @@ class TraitValue(bpy.types.PropertyGroup):
 
     collection_: bpy.props.PointerProperty(
         type=bpy.types.Collection, 
+        update=collection_object_update
+    )
+
+    material_: bpy.props.PointerProperty(
+        type=bpy.types.Material, 
+        update=collection_object_update
+    )
+
+    world_: bpy.props.PointerProperty(
+        type=bpy.types.World, 
         update=collection_object_update
     )
 

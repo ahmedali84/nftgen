@@ -59,39 +59,43 @@ def pick_random_choice(trait):
     return choice[0]
 
 def update_token(token_dict):
+    traits = get_traits()
     traits_values = get_traits_values()
 
-    # hide all relevant objects/collections
-    relevant_objects = [
-        tv.object_ for tv in traits_values if tv.object_
-    ]
+    for trait_name, trait_value_name in token_dict.items():
+        update_attribute(traits[trait_name], traits_values[trait_value_name])
 
-    for ob in relevant_objects:
-        ob.hide_set(True)
-        ob.hide_render = True
+    # # hide all relevant objects/collections
+    # relevant_objects = [
+    #     tv.object_ for tv in traits_values if tv.object_
+    # ]
 
-    relevant_collections = [
-        tv.collection_ for tv in traits_values if tv.collection_
-    ]
+    # for ob in relevant_objects:
+    #     ob.hide_set(True)
+    #     ob.hide_render = True
 
-    for col in relevant_collections:
-        col.hide_viewport = True
-        col.hide_render = True
+    # relevant_collections = [
+    #     tv.collection_ for tv in traits_values if tv.collection_
+    # ]
+
+    # for col in relevant_collections:
+    #     col.hide_viewport = True
+    #     col.hide_render = True
 
     
-    # unhide the given token relevant objects/collections
-    token_attributes = token_dict.values()
-    for attr in token_attributes:
-        trait_value = traits_values[attr]
-        if trait_value.object_:
-            trait_value.object_.hide_set(False)
-            trait_value.object_.hide_render = False
+    # # unhide the given token relevant objects/collections
+    # token_attributes = token_dict.values()
+    # for attr in token_attributes:
+    #     trait_value = traits_values[attr]
+    #     if trait_value.object_:
+    #         trait_value.object_.hide_set(False)
+    #         trait_value.object_.hide_render = False
 
-        if trait_value.collection_:
-            trait_value.collection_.hide_viewport = False
-            trait_value.collection_.hide_render = False
+    #     if trait_value.collection_:
+    #         trait_value.collection_.hide_viewport = False
+    #         trait_value.collection_.hide_render = False
 
-    bpy.context.view_layer.update()
+    # bpy.context.view_layer.update()
 
 def max_unique_tokens():
     """Get maximum number of available unique variations"""
@@ -303,3 +307,106 @@ def get_candidate_tv(trait_value):
         return active_trait_values[lower_tv_index].name
     else:
         return active_trait_values[upper_tv_index].name
+    
+def update_attribute(trait, trait_value):
+    """Update attribute in viewport depending on trait type
+    This is a wrapper function for viewport update functions"""
+    # get trait
+
+    # assign an update function depending on trait type
+    UPDATE_FUNC = {
+        '0':update_object, 
+        '1':update_collection, 
+        '2':update_material, 
+        '3':update_world,  
+    }
+
+    # update the relevant trait in viewport
+    UPDATE_FUNC[trait.value_type](trait, trait_value)
+
+def update_object(trait, trait_value):
+    """Update object in viewport"""
+    # hide all objects relevant to trait
+    traits_values = get_traits_values()
+    relevant_objects = [
+        tv.object_ for tv in traits_values if tv.trait_id == trait.name 
+        and bool(tv.object_)
+    ]
+
+    for ob in relevant_objects:
+        ob.hide_set(True)
+        ob.hide_render = True
+
+    # unhide object with the name value
+    ob = trait_value.object_
+    ob.hide_set(False)
+    ob.hide_render = False
+
+    bpy.context.view_layer.update()
+
+def update_collection(trait, trait_value):
+    """Update collection in viewport"""
+    # hide all collections relevant to the givven trait
+    traits_values = get_traits_values()
+    relevant_collections = [
+        tv.collection_ for tv in traits_values if tv.trait_id == trait.name 
+        and bool(tv.collection_)
+    ]
+
+    for col in relevant_collections:
+        col.hide_viewport = True
+        col.hide_render = True
+
+    col = trait_value.collection_
+    col.hide_viewport = False
+    col.hide_render = False
+    
+    bpy.context.view_layer.update()
+
+def update_material(trait, trait_value):
+    # get all objects using this material
+    # but how to get relevant objects
+    traits_values = get_traits_values()
+    trait_materials = [
+        tv.material_ for tv in traits_values 
+        if tv.trait_id == trait.name and bool(tv.material_)
+    ]
+
+    # get a list of all objects using any of the trait materials
+    relevant_objects_slots = set()
+    for mat in trait_materials:
+        user_objects_slots = get_material_users(mat)
+        if user_objects_slots:
+            relevant_objects_slots.update(user_objects_slots)
+
+    # replace all materials in the relevant objects material sockets
+    material = trait_value.material_
+
+    for ob, slot_index in relevant_objects_slots:
+        ob.material_slots[slot_index].material = material
+
+    bpy.context.view_layer.update()
+
+def update_world(trait, trait_value):
+    """Update world in viewport"""
+    scene = bpy.context.scene
+    world = trait_value.world_
+
+    if world:
+        scene.world = world
+
+    bpy.context.view_layer.update()
+
+def get_material_users(material):
+    """Return a list of all objects that use this material and the relevant
+    material slot"""
+    user_objects = set()
+    for ob in bpy.data.objects:
+        try:
+            for slot in ob.material_slots:
+                if slot.material == material:
+                    user_objects.add((ob, slot.slot_index))
+        except:
+            pass
+    
+    return user_objects
