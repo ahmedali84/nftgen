@@ -16,12 +16,23 @@ def active_trait_id_update(self, context):
         # print(all_trait_values.index(relevant_trait_values[-1]))
         self.active_trait_value_id = all_trait_values.index(relevant_trait_values[-1])
         
-def collection_object_update(self, context):
-    if self.object_ and not self.metadata_name:
-        self.metadata_name = self.object_.name
+def metadata_name_update(self, context):
+    traits = func.get_traits()
+    active_trait = traits[self.trait_id]
+    trait_type = active_trait.value_type
 
-    if self.collection_ and not self.metadata_name:
-        self.metadata_name = self.collection_.name
+    TYPE_DATABLOCK_DICT = {
+        '0':"object_", 
+        '1':"collection_", 
+        '2':"material_", 
+        '3':"world_", 
+    }
+
+    datablock_name = TYPE_DATABLOCK_DICT.get(trait_type)
+    datablock = getattr(self, datablock_name)
+
+    if datablock and not self.metadata_name:
+        self.metadata_name = datablock.name
 
 def active_token_update(self, context):
     func.set_active_token_props()
@@ -251,22 +262,22 @@ class TraitValue(bpy.types.PropertyGroup):
 
     object_: bpy.props.PointerProperty(
         type=bpy.types.Object, 
-        update=collection_object_update
+        update=metadata_name_update
     )
 
     collection_: bpy.props.PointerProperty(
         type=bpy.types.Collection, 
-        update=collection_object_update
+        update=metadata_name_update
     )
 
     material_: bpy.props.PointerProperty(
         type=bpy.types.Material, 
-        update=collection_object_update
+        update=metadata_name_update
     )
 
     world_: bpy.props.PointerProperty(
         type=bpy.types.World, 
-        update=collection_object_update
+        update=metadata_name_update
     )
 
 class Rule(bpy.types.PropertyGroup):
