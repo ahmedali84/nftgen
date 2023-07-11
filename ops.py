@@ -32,6 +32,11 @@ class AddTrait(bpy.types.Operator):
     def execute(self, context):
         props = func.get_props()
         traits = func.get_traits()
+        tokens = func.get_tokens()
+
+        if tokens:
+            func.existing_tokens_msg(self)
+            return {'CANCELLED'}
 
         new_trait = traits.add()
         new_trait.name = func.generate_random_id()
@@ -56,6 +61,11 @@ class RemoveTrait(bpy.types.Operator):
     def execute(self, context):
         props = func.get_props()
         traits = func.get_traits()
+        tokens = func.get_tokens()
+
+        if tokens:
+            func.existing_tokens_msg(self)
+            return {'CANCELLED'}
 
         active_trait_index = props.active_trait_id
         active_trait = traits[active_trait_index]
@@ -82,6 +92,11 @@ class AddTraitValue(bpy.types.Operator):
         traits = func.get_traits()
         trait_values = func.get_traits_values()
         active_trait_index = props.active_trait_id
+
+        tokens = func.get_tokens()
+        if tokens:
+            func.existing_tokens_msg(self)
+            return {'CANCELLED'}
 
         new_trait_value = trait_values.add()
         new_trait_value.name = func.generate_random_id()
@@ -120,6 +135,11 @@ class RemoveTraitValue(bpy.types.Operator):
         candidate_tv = func.get_candidate_tv(active_trait_value)
         # print(f"Next tv= {candidate_tv.metadata_name}")
 
+        tokens = func.get_tokens()
+        if tokens:
+            func.existing_tokens_msg(self)
+            return {'CANCELLED'}
+
         traits_values.remove(active_trait_value_id)
         
         if candidate_tv:
@@ -144,7 +164,7 @@ class ClearTraitValues(bpy.types.Operator):
         active_trait_index = props.active_trait_id
         traits = func.get_traits()
 
-        func.remove_trait_values(traits[active_trait_index].name)
+        func.remove_trait_values(traits[active_trait_index])
 
         # props.active_trait_value_id = 0
         return {'FINISHED'}
@@ -295,6 +315,11 @@ class UpTrait(bpy.types.Operator):
         props = func.get_props()
         traits = func.get_traits()
 
+        tokens = func.get_tokens()
+        if tokens:
+            func.existing_tokens_msg(self)
+            return {'CANCELLED'}
+
         traits.move(props.active_trait_id, props.active_trait_id - 1)
         props.active_trait_id -= 1
 
@@ -320,6 +345,11 @@ class DownTrait(bpy.types.Operator):
     def execute(self, context):
         props = func.get_props()
         traits = func.get_traits()
+
+        tokens = func.get_tokens()
+        if tokens:
+            func.existing_tokens_msg(self)
+            return {'CANCELLED'}
 
         traits.move(props.active_trait_id, props.active_trait_id + 1)
         props.active_trait_id += 1

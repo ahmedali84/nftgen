@@ -419,3 +419,6 @@ def get_material_users(material):
             pass
     
     return user_objects
+
+def existing_tokens_msg(operator):
+    operator.report({'ERROR'}, message="Clear Existing Tokens")
