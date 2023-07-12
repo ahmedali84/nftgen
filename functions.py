@@ -327,7 +327,8 @@ def update_attribute(trait, trait_value):
         '0':update_object, 
         '1':update_collection, 
         '2':update_material, 
-        '3':update_world,  
+        '3':update_world, 
+        '4':update_action
     }
 
     # update the relevant trait in viewport
@@ -374,7 +375,6 @@ def update_collection(trait, trait_value):
 
 def update_material(trait, trait_value):
     # get all objects using this material
-    # but how to get relevant objects
     traits_values = get_traits_values()
     trait_materials = [
         tv.material_ for tv in traits_values 
@@ -406,6 +406,29 @@ def update_world(trait, trait_value):
 
     bpy.context.view_layer.update()
 
+def update_action(trait, trait_value):
+    """Update action in viewport"""
+    traits_values = get_traits_values()
+    trait_actions = [
+        tv.action_ for tv in traits_values
+        if tv.trait_id == trait.name and bool(tv.action_)
+    ]
+
+    # get a list of all objects using any of the trait actions
+    relevant_objects = set()
+    for act in trait_actions:
+        user_objects = get_action_users(act)
+        if user_objects:
+            relevant_objects.update(user_objects)
+
+    # replace all actions in the relevant objects
+    action = trait_value.action_
+
+    for ob in relevant_objects:
+        ob.animation_data.action = action
+
+    bpy.context.view_layer.update()
+
 def get_material_users(material):
     """Return a list of all objects that use this material and the relevant
     material slot"""
@@ -418,6 +441,16 @@ def get_material_users(material):
         except:
             pass
     
+    return user_objects
+
+def get_action_users(action):
+    """Return a list of all the objects using the given action"""
+    user_objects = set()
+    for ob in bpy.data.objects:
+        if ob.animation_data:
+            if ob.animation_data.action == action:
+                user_objects.add(ob)
+
     return user_objects
 
 def existing_tokens_msg(operator):

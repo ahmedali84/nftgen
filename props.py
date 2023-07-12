@@ -26,11 +26,13 @@ def metadata_name_update(self, context):
         '1':"collection_", 
         '2':"material_", 
         '3':"world_", 
+        '4':"action_"
     }
 
     datablock_name = TYPE_DATABLOCK_DICT.get(trait_type)
     datablock = getattr(self, datablock_name)
 
+    # update metadata name only if it's not assigned yet
     if datablock and not self.metadata_name:
         self.metadata_name = datablock.name
 
@@ -224,6 +226,7 @@ class Trait(bpy.types.PropertyGroup):
             ("1", "Collections", "Collections", 'OUTLINER_COLLECTION', 1), 
             ("2", "Materials", "Materials", 'MATERIAL_DATA', 2),
             ("3", "Worlds", "Worlds", 'WORLD_DATA', 3),
+            ("4", "Actions", "Actions", 'ACTION', 4)
         ],
         default= '0'
     )
@@ -278,6 +281,11 @@ class TraitValue(bpy.types.PropertyGroup):
 
     world_: bpy.props.PointerProperty(
         type=bpy.types.World, 
+        update=metadata_name_update
+    )
+
+    action_: bpy.props.PointerProperty(
+        type=bpy.types.Action, 
         update=metadata_name_update
     )
 
