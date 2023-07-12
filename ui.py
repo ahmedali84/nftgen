@@ -190,7 +190,7 @@ class TraitsPanel(bpy.types.Panel):
         sub.operator("nftgen.down_trait", icon='TRIA_DOWN', text="")
 
 
-        col.label(text= "Trait Values:")
+        col.label(text= "Active Trait Choices:")
         row = col.row()
         row.template_list(
             "TRAITVALUES_UL_items", "", scene, "traits_values", props, "active_trait_value_id"
