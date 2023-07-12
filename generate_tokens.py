@@ -6,7 +6,7 @@ from time import sleep
 class GenerateTokens(bpy.types.Operator):
     bl_idname = "nftgen.generate_tokens"
     bl_label = "Generate Tokens"
-    bl_description = """Randomly generate tokens according to rarities assigned to each trait"""
+    bl_description = """Randomly generate tokens according to rarities assigned to each choice"""
     bl_options = {'UNDO'}
 
     timer = None
@@ -105,7 +105,7 @@ class GenerateTokens(bpy.types.Operator):
 class FeelingLucky(bpy.types.Operator):
     bl_idname = "nftgen.feeling_lucky"
     bl_label = "I'm Feeling Lucky"
-    bl_description = "Generate a Random Values for active token"
+    bl_description = "Generate Random Choices for Active Token"
     bl_options = {'UNDO'}
 
     @classmethod

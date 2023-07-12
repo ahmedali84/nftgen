@@ -5,7 +5,7 @@ import json
 class ExportMetadata(bpy.types.Operator):
     bl_idname = "nftgen.export_metadata"
     bl_label = "Export Metadata"
-    bl_description = "Export metadata to destination folder"
+    bl_description = "Export All Tokens Metadata of Indices in Range 'From' to 'To'"
     bl_options = {'UNDO'}
 
     @classmethod

@@ -80,7 +80,7 @@ class RemoveTrait(bpy.types.Operator):
 class AddTraitValue(bpy.types.Operator):
     bl_idname = "nftgen.add_trait_value"
     bl_label = "Add"
-    bl_description = "Add new value for active trait"
+    bl_description = "Add new choice for active trait"
     bl_options = {'UNDO'}
 
     @classmethod
@@ -109,7 +109,7 @@ class AddTraitValue(bpy.types.Operator):
 class RemoveTraitValue(bpy.types.Operator):
     bl_idname = "nftgen.remove_trait_value"
     bl_label = "Remove"
-    bl_description = "Remove active trait value"
+    bl_description = "Remove active choice"
     bl_options = {'UNDO'}
 
     @classmethod
@@ -152,7 +152,7 @@ class RemoveTraitValue(bpy.types.Operator):
 class ClearTraitValues(bpy.types.Operator):
     bl_idname = "nftgen.clear_trait_value"
     bl_label = "Clear"
-    bl_description = "Clear values for active trait"
+    bl_description = "Clear All Choices for Active Trait"
     bl_options = {'UNDO'}
 
     @classmethod
@@ -172,7 +172,7 @@ class ClearTraitValues(bpy.types.Operator):
 class ClearTokens(bpy.types.Operator):
     bl_idname = "nftgen.clear_tokens"
     bl_label = "Clear Tokens"
-    bl_description = "Clear all generated tokens"
+    bl_description = "Clear All Generated Tokens"
     bl_options = {'UNDO'}
 
     @classmethod
@@ -301,7 +301,7 @@ class OpenOutputDir(bpy.types.Operator):
 class UpTrait(bpy.types.Operator):
     bl_idname = "nftgen.up_trait"
     bl_label = "Up"
-    bl_description = "Move selected trait up"
+    bl_description = "Move active trait up"
     bl_options = {'UNDO'}
 
     @classmethod
@@ -332,7 +332,7 @@ class UpTrait(bpy.types.Operator):
 class DownTrait(bpy.types.Operator):
     bl_idname = "nftgen.down_trait"
     bl_label = "Down"
-    bl_description = "Move selected trait down"
+    bl_description = "Move active trait down"
     bl_options = {'UNDO'}
 
     @classmethod

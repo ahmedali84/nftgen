@@ -5,7 +5,7 @@ from . import functions as func
 class RenderBatch(bpy.types.Operator):
     bl_idname = "nftgen.render"
     bl_label = "Render"
-    bl_description = "Render tokens in range -from- to -To-"
+    bl_description = "Render All Tokens of Indices in Range 'From' to 'To'"
     bl_options = {'UNDO'}
 
     _timer = None

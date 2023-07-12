@@ -110,6 +110,7 @@ def active_token_tv_update(self, context):
 class NFTGenProps(bpy.types.PropertyGroup):
     active_token_id: bpy.props.IntProperty(
         name="Active Token", 
+        description="Active Token Number", 
         default=0, 
         min=0, 
         update=active_token_update, 
@@ -138,6 +139,7 @@ class NFTGenProps(bpy.types.PropertyGroup):
 
     tokens_count: bpy.props.IntProperty(
         name="Tokens Count", 
+        description="Number of Tokens to Generate", 
         min=1, 
         default=1
     )
@@ -145,6 +147,7 @@ class NFTGenProps(bpy.types.PropertyGroup):
     # render/export props
     export_from: bpy.props.IntProperty(
         name="From", 
+        description="Token Index to Start Render/Export From", 
         min=0, 
         default=0, 
         get=export_from_get, 
@@ -152,6 +155,7 @@ class NFTGenProps(bpy.types.PropertyGroup):
     )
     export_to: bpy.props.IntProperty(
         name="To", 
+        description="Token Index to End Render/Export To", 
         min=0, 
         default=0, 
         get=export_to_get, 
@@ -160,6 +164,7 @@ class NFTGenProps(bpy.types.PropertyGroup):
 
     output_dir: bpy.props.StringProperty(
         name="Output Folder", 
+        description="All Renders and Metadata will be Exported to this Folder", 
         default="//", 
         subtype="DIR_PATH"
     )
@@ -173,7 +178,7 @@ class NFTGenProps(bpy.types.PropertyGroup):
     # Additional metadata props
     description: bpy.props.StringProperty(
         name="Description", 
-        description="Description of Project", 
+        description="Description of This Project", 
         default=""
     )
 
@@ -185,13 +190,13 @@ class NFTGenProps(bpy.types.PropertyGroup):
 
     token_name: bpy.props.StringProperty(
         name="Token Name", 
-        description="Token Name, # symbol resembles token index/id", 
+        description="Token Name Attribute in metadata\nHash symbol '#' resembles token index\nExample: 'monkey_#' for token no. 22 will be 'monkey_22'", 
         default="#"
     )
 
     image_url:bpy.props.StringProperty(
         name="Image URL", 
-        description="URL of the token image, # symbol resembles token index/id", 
+        description="URL of the Token Image in Metadata\nHash symbol '#' resembles token index\nExample 'http://myurl/monkey_#' for token no. 22 will be 'http://myurl/monkey_22.png'", 
         default="#"
     )
 
