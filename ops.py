@@ -41,7 +41,7 @@ class AddTrait(bpy.types.Operator):
         new_trait = traits.add()
         new_trait.name = func.generate_random_id()
         idx = traits.find(new_trait.name)
-        print(idx)
+        # print(idx)
         props.active_trait_id = idx
 
         props.traits_updated = func.traits_updated()
