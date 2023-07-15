@@ -225,7 +225,7 @@ class GeneratePanel(bpy.types.Panel):
         max_unique_tokens = func.max_unique_tokens()
         traits = func.get_traits()
 
-        if props.tokens_count >= max_unique_tokens and bool(traits):
+        if props.tokens_count > max_unique_tokens and bool(traits):
             text = f"Warning: Max unique tokens = {max_unique_tokens}"
             icon = "ERROR"
         else:
