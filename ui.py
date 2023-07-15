@@ -220,8 +220,8 @@ class GeneratePanel(bpy.types.Panel):
         props = func.get_props()
         layout = self.layout
         col = layout.column()
-        col.prop(props, "tokens_count")
-        col.operator("nftgen.generate_tokens", text="Generate", icon="FILE_REFRESH")
+        col.prop(props, "tokens_count", text="Tokens")
+        col.operator("nftgen.generate_tokens", text="Generate Tokens", icon="FILE_REFRESH")
 
         max_unique_tokens = func.max_unique_tokens()
         if props.tokens_count >= max_unique_tokens:
