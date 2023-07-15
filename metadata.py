@@ -23,7 +23,8 @@ class ExportMetadata(bpy.types.Operator):
             "#" in props.image_url
         ])
         if not hash_symbol_exists:
-            self.report(type={'WARNING'}, message="Token Name and Image URL must include a # symbol")
+            self.report(type={'ERROR'}, message="Token Name and Image URL must include a # symbol")
+            return {'CANCELLED'}
 
         start = props.export_from
         end = props.export_to
