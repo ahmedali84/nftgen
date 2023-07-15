@@ -131,7 +131,7 @@ class FeelingLucky(bpy.types.Operator):
             problematic_traits_names = [t.metadata_name for t in problematic_traits]
 
             self.report(
-                {'WARNING'}, message=f"{', '.join(problematic_traits_names)} total rarities must be greater than zero"
+                {'ERROR'}, message=f"{', '.join(problematic_traits_names)} total rarities must be greater than zero"
             )
             return {'CANCELLED'}
 
