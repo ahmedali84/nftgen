@@ -107,7 +107,7 @@ def max_unique_tokens():
     """Get maximum number of available unique variations"""
     traits_values = get_traits_values()
     
-    rec_list = [tv.trait_id for tv in traits_values]
+    rec_list = [tv.trait_id for tv in traits_values if tv.rarity > 0]
     counter_dict = Counter(rec_list)
 
     return prod(list(counter_dict.values()))
