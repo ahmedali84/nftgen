@@ -18,8 +18,9 @@ class GenerateTokens(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         props = func.get_props()
+        traits = func.get_traits()
         max_unique_tokens = func.max_unique_tokens()
-        return props.tokens_count <= max_unique_tokens
+        return props.tokens_count <= max_unique_tokens and bool(traits)
 
     def execute(self, context):
         props = func.get_props()
