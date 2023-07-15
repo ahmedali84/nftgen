@@ -454,4 +454,4 @@ def get_action_users(action):
     return user_objects
 
 def existing_tokens_msg(operator):
-    operator.report({'ERROR'}, message="Clear Existing Tokens")
+    operator.report({'ERROR'}, message="Clear Existing Tokens First")
