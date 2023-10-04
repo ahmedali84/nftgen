@@ -78,9 +78,13 @@ class TokenDetailsPanel(bpy.types.Panel):
             col = layout.column(align= True)
             for p in active_token_props:
                 trait_index = traits.find(p.trait)
+                trait = traits[trait_index]
                 row = col.row(align=False)
                 if trait_index == -1:
                     row.label(text="This trait has been removed", icon='ERROR')
+
+                elif not trait.enable:
+                    row.label(text=f"{trait.metadata_name} is disabled")
                     
                 else:
                     row.label(text=f"{traits[p.trait].metadata_name}:")
@@ -93,7 +97,7 @@ class TRAITS_UL_items(bpy.types.UIList):
     """The Slots UI list"""
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname):
         row = layout.row()
-        # row.prop(item, "enable", text= "")
+        row.prop(item, "enable", text= "")
         row.prop(item, "metadata_name", text= "", emboss=False)
         row.prop(item, "value_type", text= "")
         

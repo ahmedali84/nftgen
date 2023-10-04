@@ -67,41 +67,18 @@ def update_token(token_dict):
         trait_value_index = traits_values.find(trait_value_name)
 
         if trait_index == -1 or trait_value_index == -1:
+            # metadata trait/trait value is not found in the traits/trait values list
             print("Unable to  update token, some properties have been removed!")
-        else:
-            update_attribute(traits[trait_name], traits_values[trait_value_name])
+            continue
 
-    # # hide all relevant objects/collections
-    # relevant_objects = [
-    #     tv.object_ for tv in traits_values if tv.object_
-    # ]
+        trait = traits.get(trait_name)
+        if trait:
+            if not trait.enable:
+                # don't update a trait if disabled in the traits list
+                print(f"Trait {trait.metadata_name} is disabled")
+                continue
 
-    # for ob in relevant_objects:
-    #     ob.hide_set(True)
-    #     ob.hide_render = True
-
-    # relevant_collections = [
-    #     tv.collection_ for tv in traits_values if tv.collection_
-    # ]
-
-    # for col in relevant_collections:
-    #     col.hide_viewport = True
-    #     col.hide_render = True
-
-    
-    # # unhide the given token relevant objects/collections
-    # token_attributes = token_dict.values()
-    # for attr in token_attributes:
-    #     trait_value = traits_values[attr]
-    #     if trait_value.object_:
-    #         trait_value.object_.hide_set(False)
-    #         trait_value.object_.hide_render = False
-
-    #     if trait_value.collection_:
-    #         trait_value.collection_.hide_viewport = False
-    #         trait_value.collection_.hide_render = False
-
-    # bpy.context.view_layer.update()
+        update_attribute(traits[trait_name], traits_values[trait_value_name])
 
 def max_unique_tokens():
     """Get maximum number of available unique variations"""
@@ -349,8 +326,9 @@ def update_object(trait, trait_value):
 
     # unhide object with the name value
     ob = trait_value.object_
-    ob.hide_set(False)
-    ob.hide_render = False
+    if ob:
+        ob.hide_set(False)
+        ob.hide_render = False
 
     bpy.context.view_layer.update()
 
@@ -368,8 +346,9 @@ def update_collection(trait, trait_value):
         col.hide_render = True
 
     col = trait_value.collection_
-    col.hide_viewport = False
-    col.hide_render = False
+    if col:
+        col.hide_viewport = False
+        col.hide_render = False
     
     bpy.context.view_layer.update()
 
@@ -390,9 +369,9 @@ def update_material(trait, trait_value):
 
     # replace all materials in the relevant objects material sockets
     material = trait_value.material_
-
-    for ob, slot_index in relevant_objects_slots:
-        ob.material_slots[slot_index].material = material
+    if material:
+        for ob, slot_index in relevant_objects_slots:
+            ob.material_slots[slot_index].material = material
 
     bpy.context.view_layer.update()
 
@@ -423,9 +402,9 @@ def update_action(trait, trait_value):
 
     # replace all actions in the relevant objects
     action = trait_value.action_
-
-    for ob in relevant_objects:
-        ob.animation_data.action = action
+    if action:
+        for ob in relevant_objects:
+            ob.animation_data.action = action
 
     bpy.context.view_layer.update()
 
