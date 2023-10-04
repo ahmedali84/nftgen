@@ -434,3 +434,13 @@ def get_action_users(action):
 
 def existing_tokens_msg(operator):
     operator.report({'ERROR'}, message="Clear Existing Tokens First")
+
+def clear_unlocked_tokens(tokens):
+    """Remove all tokens with is_locked == False"""
+    tokens_to_remove = [
+        tk for tk in tokens if not tk.is_locked
+    ]
+
+    for tk in tokens_to_remove:
+        token_index = tokens.find(tk.name)
+        tokens.remove(token_index)

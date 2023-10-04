@@ -38,9 +38,15 @@ class NavigatePanel(bpy.types.Panel):
         mode = props.mode
         tokens = func.get_tokens()
         
+        
         col = layout.column(align=False)
+        row = col.row(align=False)
         if tokens:
-            col.prop(props, "active_token_id")
+            active_token = tokens[props.active_token_id]
+            icon = "LOCKED" if active_token.is_locked else "UNLOCKED"
+            row.prop(active_token, "is_locked", toggle=1, icon=icon, text="")
+            row.prop(props, "active_token_id")
+            
             col.scale_y = 2
 
         col = layout.column(align=False)

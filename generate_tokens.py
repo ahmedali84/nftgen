@@ -40,9 +40,10 @@ class GenerateTokens(bpy.types.Operator):
             )
             return {'CANCELLED'}
 
-        tokens.clear()
+        # tokens.clear()
+        func.clear_unlocked_tokens(tokens)
 
-        self.tokens_count = props.tokens_count
+        self.tokens_count = props.tokens_count - len(tokens)
         self.progress = 0
         props.generate_progress = 0
         props.traits_updated = False

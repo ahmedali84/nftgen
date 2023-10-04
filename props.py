@@ -208,6 +208,12 @@ class Token(bpy.types.PropertyGroup):
     attributes: bpy.props.StringProperty(
         default=""
     )
+
+    is_locked: bpy.props.BoolProperty(
+        name="Lock", 
+        description="This token will not be removed if a new collection of tokens is generated", 
+        default=False
+    )
     
 class Trait(bpy.types.PropertyGroup):
     name: bpy.props.StringProperty(
