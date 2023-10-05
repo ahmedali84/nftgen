@@ -25,8 +25,9 @@ def metadata_name_update(self, context):
         '0':"object_", 
         '1':"collection_", 
         '2':"material_", 
-        '3':"world_", 
-        '4':"action_"
+        '3':"image_", 
+        '4':"world_", 
+        '5':"action_"
     }
 
     datablock_name = TYPE_DATABLOCK_DICT.get(trait_type)
@@ -235,9 +236,10 @@ class Trait(bpy.types.PropertyGroup):
         items= [
             ("0", "Objects", "Objects", 'OBJECT_DATA', 0),
             ("1", "Collections", "Collections", 'OUTLINER_COLLECTION', 1), 
-            ("2", "Materials", "Materials", 'MATERIAL_DATA', 2),
-            ("3", "Worlds", "Worlds", 'WORLD_DATA', 3),
-            ("4", "Actions", "Actions", 'ACTION', 4)
+            ("2", "Materials", "Materials", 'MATERIAL_DATA', 2), 
+            ("3", "Images", "Images", 'IMAGE_DATA', 3), 
+            ("4", "Worlds", "Worlds", 'WORLD_DATA', 4),
+            ("5", "Actions", "Actions", 'ACTION', 5)
         ],
         default= '0'
     )
@@ -287,6 +289,11 @@ class TraitValue(bpy.types.PropertyGroup):
 
     material_: bpy.props.PointerProperty(
         type=bpy.types.Material, 
+        update=metadata_name_update
+    )
+
+    image_: bpy.props.PointerProperty(
+        type=bpy.types.Image, 
         update=metadata_name_update
     )
 

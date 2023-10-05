@@ -125,8 +125,9 @@ class TRAITVALUES_UL_items(bpy.types.UIList):
             '0': "object_", 
             '1': "collection_", 
             '2': "material_", 
-            '3': "world_", 
-            '4': "action_"
+            '3': "image_", 
+            '4': "world_", 
+            '5': "action_"
         }
         row.prop(item, VALUE_TYPES[trait.value_type], text="")
 

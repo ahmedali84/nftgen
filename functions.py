@@ -304,8 +304,9 @@ def update_attribute(trait, trait_value):
         '0':update_object, 
         '1':update_collection, 
         '2':update_material, 
-        '3':update_world, 
-        '4':update_action
+        '3':update_image, 
+        '4':update_world, 
+        '5':update_action
     }
 
     # update the relevant trait in viewport
@@ -375,6 +376,26 @@ def update_material(trait, trait_value):
 
     bpy.context.view_layer.update()
 
+def update_image(trait, trait_value):
+    trait_values = get_traits_values()
+    trait_images = [
+        tv.image_ for tv in trait_values 
+        if tv.trait_id == trait.name and bool(tv.image_)
+    ]
+
+    # get all image texture nodes using any of the trait images
+    relevant_nodes = set()
+    for img in trait_images:
+        user_nodes = get_image_users(img)
+        if user_nodes:
+            relevant_nodes.update(user_nodes)
+
+    # replace all images in the relevant image texture nodes with the current choice
+    image = trait_value.image_
+    if image:
+        for node in relevant_nodes:
+            node.image = image
+
 def update_world(trait, trait_value):
     """Update world in viewport"""
     scene = bpy.context.scene
@@ -421,6 +442,21 @@ def get_material_users(material):
             pass
     
     return user_objects
+
+def get_image_users(image):
+    """Return a list of all image texture nodes that use this image"""
+    user_nodes = set()
+    for material in bpy.data.materials:
+        try:
+            nodes = material.node_tree.nodes
+            for node in nodes:
+                if isinstance(node, bpy.types.ShaderNodeTexImage):
+                    if node.image == image:
+                        user_nodes.add(node)
+        except:
+            pass
+
+    return user_nodes
 
 def get_action_users(action):
     """Return a list of all the objects using the given action"""
