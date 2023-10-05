@@ -42,8 +42,9 @@ class GenerateTokens(bpy.types.Operator):
 
         # tokens.clear()
         func.clear_unlocked_tokens(tokens)
+        self.existing_tokens_count = len(tokens)
 
-        self.tokens_count = props.tokens_count - len(tokens)
+        self.tokens_count = props.tokens_count - self.existing_tokens_count
         self.progress = 0
         props.generate_progress = 0
         props.traits_updated = False
@@ -60,11 +61,12 @@ class GenerateTokens(bpy.types.Operator):
             tokens = func.get_tokens()
             props = func.get_props()
 
+            print(len(tokens))
             # update the tokens global prop
             for i, element in enumerate(self.tokens):
                 new_token = tokens.add()
                 new_token.attributes = element
-                new_token.index = i
+                new_token.name = func.generate_random_id()
 
             # navigate to the first token in the stack
             # and switch to edit tab

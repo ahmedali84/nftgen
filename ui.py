@@ -54,6 +54,7 @@ class NavigatePanel(bpy.types.Panel):
         if tokens:
             row.label(text=f"{len(tokens)} Tokens")
             row.operator("nftgen.clear_tokens", text="", icon='TRASH')
+            row.operator("nftgen.shuffle_tokens", text="", icon='GRAPH')
 
         col = layout.column(align=True)
         row = col.row(align=True)

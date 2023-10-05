@@ -202,10 +202,10 @@ class NFTGenProps(bpy.types.PropertyGroup):
     )
 
 class Token(bpy.types.PropertyGroup):
-    index: bpy.props.IntProperty(
-        name="Index", 
-        default=0
-    )
+    # index: bpy.props.IntProperty(
+    #     name="Index", 
+    #     default=0
+    # )
     attributes: bpy.props.StringProperty(
         default=""
     )

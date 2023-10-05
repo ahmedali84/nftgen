@@ -192,6 +192,30 @@ class ClearTokens(bpy.types.Operator):
         props = func.get_props()
         props.mode = '0'
         return {'FINISHED'}
+    
+class ShuffleTokens(bpy.types.Operator):
+    bl_idname = "nftgen.shuffle_tokens"
+    bl_label = "Shuffle Tokens"
+    bl_description = "Reorder the tokens collection randomly"
+    bl_options = {'UNDO'}
+
+    @classmethod
+    def poll(cls, context):
+        tokens = func.get_tokens()
+        return bool(tokens)
+
+    def execute(self, context):
+        tokens = func.get_tokens()
+        func.randomize_tokens_order(tokens)
+
+        # clear active token collection props
+        active_token_props = func.get_active_token_props()
+        active_token_props.clear()
+
+        # go back to the first token
+        props = func.get_props()
+        props.active_token_id = 0
+        return {'FINISHED'}
 
 class AddRule(bpy.types.Operator):
     bl_idname = "nftgen.add_rule"
@@ -367,6 +391,7 @@ classes = (
     RenderBatch, 
     ExportMetadata, 
     ClearTokens, 
+    ShuffleTokens, 
     AddRule, 
     RemoveRule, 
     UpRule, 

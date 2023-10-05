@@ -473,10 +473,31 @@ def existing_tokens_msg(operator):
 
 def clear_unlocked_tokens(tokens):
     """Remove all tokens with is_locked == False"""
-    tokens_to_remove = [
-        tk for tk in tokens if not tk.is_locked
+    locked_tokens = [
+        tk for tk in tokens if tk.is_locked
     ]
+    locked_tokens_data = [
+        {'name': tk.name, 'attributes':tk.attributes, 'is_locked': tk.is_locked} 
+        for tk in locked_tokens
+    ]
+    tokens.clear()
 
-    for tk in tokens_to_remove:
-        token_index = tokens.find(tk.name)
-        tokens.remove(token_index)
+    for tk in locked_tokens_data:
+        new_token = tokens.add()
+        new_token.name = tk['name']
+        new_token.attributes = tk['attributes']
+        new_token.is_locked = tk['is_locked']
+
+
+def randomize_tokens_order(tokens):
+    tokens_data = [
+        {"attributes": tk.attributes, "is_locked": tk.is_locked} 
+        for tk in tokens
+    ]
+    random.shuffle(tokens_data)
+    tokens.clear()
+
+    for tk_data in tokens_data:
+        new_token = tokens.add()
+        new_token.attributes = tk_data['attributes']
+        new_token.is_locked = tk_data['is_locked']
