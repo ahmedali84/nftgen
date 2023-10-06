@@ -38,7 +38,10 @@ class RenderBatch(bpy.types.Operator):
 
         self.stop = False
         self.rendering = False
-        self.shots = [tk for tk in tokens if tk.index >= start and tk.index <= end]
+        # self.shots = [tk for tk in tokens if tk.index >= start and tk.index <= end]
+        self.shots = [
+            tk for i, tk in enumerate(tokens) if i >= start and i <= end
+        ]
 
         # to be able to reset filepath later
         self.original_path = scene.render.filepath
@@ -57,6 +60,7 @@ class RenderBatch(bpy.types.Operator):
     def modal(self, context, event):
         scene = context.scene
         props = func.get_props()
+        tokens = func.get_tokens()
 
         if event.type == 'TIMER':
             if any([not self.shots, self.stop]):
@@ -74,8 +78,9 @@ class RenderBatch(bpy.types.Operator):
                 # assign shot and start rendering
                 scene = context.scene
                 shot = self.shots[0]
-                scene.render.filepath = os.path.join(self.path, str(shot.index))
-                props.active_token_id = shot.index
+                shot_index = tokens.find(shot.name)
+                scene.render.filepath = os.path.join(self.path, str(shot_index))
+                props.active_token_id = shot_index
 
                 # start rendering
                 bpy.ops.render.render("INVOKE_DEFAULT", write_still=True)
