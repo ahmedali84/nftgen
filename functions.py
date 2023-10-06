@@ -491,7 +491,7 @@ def clear_unlocked_tokens(tokens):
 
 def randomize_tokens_order(tokens):
     tokens_data = [
-        {"attributes": tk.attributes, "is_locked": tk.is_locked} 
+        {'name': tk.name, "attributes": tk.attributes, "is_locked": tk.is_locked} 
         for tk in tokens
     ]
     random.shuffle(tokens_data)
@@ -499,5 +499,6 @@ def randomize_tokens_order(tokens):
 
     for tk_data in tokens_data:
         new_token = tokens.add()
+        new_token.name = tk_data['name']
         new_token.attributes = tk_data['attributes']
         new_token.is_locked = tk_data['is_locked']
