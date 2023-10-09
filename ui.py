@@ -244,7 +244,9 @@ class GeneratePanel(bpy.types.Panel):
             text = f"Generate Tokens"
             icon = "FILE_REFRESH"
 
+        col = layout.column()
         col.operator("nftgen.generate_tokens", text=text, icon=icon)
+        col.scale_y = 1.5
 
 class RulesPanel(bpy.types.Panel):
     bl_label = "Rules"
