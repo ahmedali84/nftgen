@@ -266,7 +266,7 @@ class TraitValue(bpy.types.PropertyGroup):
 
     rarity: bpy.props.FloatProperty(
         name="Rarity", 
-        default=0.0, 
+        default=100.0, 
         min=0.0, 
         max=100.0, 
         subtype='PERCENTAGE'
