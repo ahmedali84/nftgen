@@ -321,18 +321,20 @@ class Rule(bpy.types.PropertyGroup):
     )
 
     value_1: bpy.props.EnumProperty(
+        name="Choice 1", 
         items=rules_items
     )
 
     value_2: bpy.props.EnumProperty(
+        name="Choice 2", 
         items=rules_items
     )
 
     relation: bpy.props.EnumProperty(
         items= [
-            ("0", "Never With", "Never with", '', 0),
-            ("1", "Only With", "Only With", '', 1), 
-            ("2", "Always Pair With", "Always Pair With", '', 2)
+            ("0", "Never With", "Never associate Choice 1 and Choice 2 in the same token", '', 0),
+            ("1", "Only With", "Pick Choice 2 whenever Choice 1 exists", '', 1), 
+            ("2", "Always Pair With", "Always associate Choice 1 and Choice 2 together, whenever any of them exists, the other should be assigned", '', 2)
         ],
         default= '0'
     )
