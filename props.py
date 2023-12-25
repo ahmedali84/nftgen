@@ -120,6 +120,8 @@ class NFTGenProps(bpy.types.PropertyGroup):
     )
 
     active_trait_id: bpy.props.IntProperty(
+        name="Active Trait", 
+        # description="Active Trait Number",
         default=0, 
         min=0, 
         update=active_trait_id_update
@@ -212,7 +214,7 @@ class Token(bpy.types.PropertyGroup):
 
     is_locked: bpy.props.BoolProperty(
         name="Lock", 
-        description="This token will not be removed if a new collection of tokens is generated", 
+        description="This token will not be removed if a new collection of tokens is generated, Locked tokens are still affected by 'Clear Tokens' action", 
         default=False
     )
     
@@ -228,7 +230,8 @@ class Trait(bpy.types.PropertyGroup):
     )
 
     enable: bpy.props.BoolProperty(
-        description="Enable this trait", 
+        name="Enable", 
+        description="Enable trait, Disable to prevent updating this trait across all tokens, this can be useful for testing", 
         default=True
     )
 
