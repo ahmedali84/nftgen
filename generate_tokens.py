@@ -53,7 +53,6 @@ class GenerateTokens(bpy.types.Operator):
             tokens = func.get_tokens()
             props = func.get_props()
 
-            print(len(tokens))
             # update the tokens global prop
             for i, element in enumerate(self.tokens):
                 new_token = tokens.add()
