@@ -27,17 +27,9 @@ class GenerateTokens(bpy.types.Operator):
         tokens = func.get_tokens()
         traits = func.get_traits()
 
-        # show warning when one trait has rarities sum = 0 
-        problematic_traits = [
-            trait for trait in traits if func.sum_rarities(trait) == 0
-        ]
-
-        if problematic_traits:
-            problematic_traits_names = [t.metadata_name for t in problematic_traits]
-
-            self.report(
-                {'WARNING'}, message=f"{', '.join(problematic_traits_names)} total rarities must be greater than zero"
-            )
+        valid, error_msg = func.validate_traits(traits)
+        if not valid:
+            self.report({'ERROR'}, "\n".join(error_msg))
             return {'CANCELLED'}
 
         # tokens.clear()

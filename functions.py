@@ -5,6 +5,7 @@ import json
 from math import prod
 from collections import Counter
 import os
+import re
 
 def get_props():
     return bpy.context.scene.nftgen
@@ -502,3 +503,86 @@ def randomize_tokens_order(tokens):
         new_token.name = tk_data['name']
         new_token.attributes = tk_data['attributes']
         new_token.is_locked = tk_data['is_locked']
+
+def get_choices(trait):
+    """Return the relevant trait choices (trait_values)"""
+    return [tv for tv in get_traits_values() if tv.trait_id == trait.name]
+
+def has_datablock_users(trait):
+    """
+    Check if at least one choice (trait value) in a trait has a 
+    datablock user
+    """
+    trait_values = get_choices(trait)
+
+    # the passed trait has no trait values yet
+    if not trait_values:
+        return False
+
+    DATABLOCK_PROPS ={
+        '2': (get_material_users, "material_"),
+        '3': (get_image_users, "image_"), 
+        '5': (get_action_users, "action_")
+    }
+
+    try:
+        get_users, data_block_type = DATABLOCK_PROPS.get(trait.value_type)
+        data_blocks = [
+            getattr(tv, data_block_type) for tv in trait_values
+        ]
+        data_blocks_users = list(map(get_users, data_blocks))
+        return any(data_blocks_users)
+
+    except TypeError:
+        # the passed trait is not a datablock dependent trait
+        # i.e. trait is neither a material, image or an action.
+        return True
+    
+    except KeyError:
+        return True
+    
+    except IndexError:
+        return False
+
+def has_valid_rarities(trait):
+    """Check if trait choices rarities sum is bigger than zero"""
+
+    return sum_rarities(trait) > 0.0
+
+def has_choices(trait):
+    """Return False if the trait has no choices (trait_values) assigned"""
+    return bool(get_choices(trait))
+
+def validate_traits(traits):
+    """Validate traits data and report issues with the relevant traits"""
+    valid = [True]
+    error_msg = []
+
+    for trait in traits:
+        if not has_choices(trait):
+            error_msg.append(
+                f"{trait.metadata_name}: has no choices assigned"
+            )
+            valid.append(False)
+            # don't bother checking the next conditions
+            # as long as this one is not fulfilled
+            continue
+
+        if not has_valid_rarities(trait):
+            error_msg.append(
+                f"{trait.metadata_name}: rarities sum must be greater than 0"
+            )
+            valid.append(False)
+
+        if not has_datablock_users(trait):
+            value_type_items = trait.bl_rna.properties['value_type'].enum_items
+            value_type = value_type_items.get(trait.value_type).name
+            # remove the s at the end if exists
+            value_type = re.sub(r"s$", "", value_type) 
+            
+            error_msg.append(
+                f"{trait.metadata_name}: at least one {value_type} needs to be assigned to an object"
+            )
+            valid.append(False)
+
+    return (all(valid), error_msg)
