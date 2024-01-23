@@ -66,6 +66,9 @@ class GenerateTokens(bpy.types.Operator):
 
             self.report({'INFO'}, message=f"Tokens Generated")
 
+            # update export_to only if it's larger than the new max tokens count
+            props.export_to = len(tokens) - 1
+
             return {'FINISHED'} 
 
         if event.type == 'TIMER':
