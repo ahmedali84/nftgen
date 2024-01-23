@@ -150,7 +150,7 @@ class NFTGenProps(bpy.types.PropertyGroup):
     # render/export props
     export_from: bpy.props.IntProperty(
         name="From", 
-        description="Token Index to Start Render/Export From", 
+        description="Token Number to Start Render/Export From", 
         min=0, 
         default=0, 
         get=export_from_get, 
@@ -158,7 +158,7 @@ class NFTGenProps(bpy.types.PropertyGroup):
     )
     export_to: bpy.props.IntProperty(
         name="To", 
-        description="Token Index to End Render/Export To", 
+        description="Token Number to End Render/Export To", 
         min=0, 
         default=0, 
         get=export_to_get, 
