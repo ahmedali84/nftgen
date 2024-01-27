@@ -119,6 +119,7 @@ The `Token Stats` is a **read only** section that provides a comprehensive overv
 ```
 #### Token Name and URL
 Example of  `token name` and `image URL` prefixes:
+
 ![](./README_FILES/blender_pfSpPwelQV.png)
 #### Sample JSON metadata
 ```json
