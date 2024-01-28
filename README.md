@@ -184,8 +184,3 @@ Example of  `token name` and `image URL` prefixes:
 - Twitter: [@ahmed_ali](https://twitter.com/ahmed_ali)
 - Mastodon: [premiero@mastodon.world](https://mastodon.world/@premiero)
 - Hire me on [Upwork](https://www.upwork.com/freelancers/~0139b13dfd3e208f29)
-## Get the Full Version
-The addon version on Github has `Materials`, `Images`, `Worlds` and `Actions` commented out in the addon code, The full version is available at:
-	- Blender Market (add link)
-	- Gumroad (add link)
-If you REALLY don't want to pay for it, and you happen to know `Python` feel free to uncomment them yourself, no hard feelings you earned it mate! 💪
