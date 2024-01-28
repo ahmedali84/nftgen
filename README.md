@@ -6,7 +6,15 @@ NFT Generator **turbocharges your creativity** by transforming isolated assets i
 * **Automate metadata generation:** Say goodbye to manual data entry. NFT Generator **populates essential details** for each NFT, saving you precious time.
 * **Fine-tune your chaos:** Define **rarity** for individual assets, controlling the frequency they appear in your collection. Craft **ultra-rare masterpieces** that stand out from the crowd!
 * **Bend the rules of reality:** Go beyond random chance. Set **rules** to **associate or disassociate traits,** ensuring specific combinations appear (or never do) – **inject your artistic vision** into every generated NFT.
-## Generate
+
+|Objects|Collections|Materials|
+|-- |-- |-- |
+|![](./README_FILES/objects.gif) |![](./README_FILES/collections.gif) | ![](./README_FILES/materials.gif)|
+
+|Images|Worlds|Actions|
+|-- |-- |-- |
+|![](./README_FILES/image.gif) |![](./README_FILES/worlds.gif) | ![](./README_FILES/actions.gif)|
+## User Guide
 ### Trait
 A trait refers to a specific characteristic or element that can be present on an NFT. It's a building block that, when combined with others, contributes to the overall visual and metadata makeup of each unique NFT in the collection.
 #### Examples
@@ -170,8 +178,10 @@ Example of  `token name` and `image URL` prefixes:
 - `Render` to render all your tokens within the `From`: `To` range.
 - `Export Metadata` to export all metadata files within the same `From`: `To` range.
 ## Installation
+1. Go to `Edit` > `Preferences` > `Addons`
+2. Press `Install` button and browse to the addon `zip` file.  
 ## Contact Me
-- On the bird website: [@ahmed_ali](https://twitter.com/ahmed_ali)
+- Twitter: [@ahmed_ali](https://twitter.com/ahmed_ali)
 - Mastodon: [premiero@mastodon.world](https://mastodon.world/@premiero)
 - Hire me on [Upwork](https://www.upwork.com/freelancers/~0139b13dfd3e208f29)
 ## Get the Full Version
