@@ -13,7 +13,7 @@ NFT Generator **turbocharges your creativity** by transforming isolated assets i
 
 |Images|Worlds|Actions|
 |-- |-- |-- |
-|![](./README_FILES/image.gif) |![](./README_FILES/worlds.gif) | ![](./README_FILES/actions.gif)|
+|![](./README_FILES/images.gif) |![](./README_FILES/worlds.gif) | ![](./README_FILES/actions.gif)|
 ## User Guide
 ### Trait
 A trait refers to a specific characteristic or element that can be present on an NFT. It's a building block that, when combined with others, contributes to the overall visual and metadata makeup of each unique NFT in the collection.
