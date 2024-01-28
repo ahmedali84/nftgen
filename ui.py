@@ -213,6 +213,15 @@ class TraitsPanel(bpy.types.Panel):
         sub.separator()
         sub.operator("nftgen.clear_trait_value", icon="TRASH", text="")
 
+        active_trait_index = props.active_trait_id
+        traits = func.get_traits()
+        active_trait = traits[active_trait_index]
+        active_trait_type = active_trait.value_type
+
+        if active_trait_type == '3':
+            sub.separator()
+            sub.operator("nftgen.load_images", icon='IMAGE_BACKGROUND', text="")
+
         col.label(text=f"Max unique tokens= {func.max_unique_tokens()}")
 
 class GeneratePanel(bpy.types.Panel):

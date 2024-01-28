@@ -4,6 +4,7 @@ import json
 from . import functions as func
 from .render import RenderBatch
 from .metadata import ExportMetadata
+from bpy_extras.io_utils import ImportHelper
 
 class Dummy(bpy.types.Operator):
     bl_idname = "nftgen.dummy"
@@ -381,6 +382,35 @@ class DownTrait(bpy.types.Operator):
         props.traits_updated = func.traits_updated()
         return {'FINISHED'}
 
+class LoadImages(bpy.types.Operator, ImportHelper):
+    bl_idname = "nftgen.load_images"
+    bl_label = "Load Images"
+    bl_description = "Load images from your desk to blender"
+    bl_options = {'UNDO'}
+
+    # add images file type filter
+
+    files: bpy.props.CollectionProperty(
+        type=bpy.types.OperatorFileListElement,
+        options={'HIDDEN', 'SKIP_SAVE'},
+    )
+
+    directory: bpy.props.StringProperty(
+        subtype='DIR_PATH',
+    )
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        for f in self.files:
+            filepath = os.path.join(self.directory, f.name)
+
+            # load image
+            bpy.data.images.load(filepath, check_existing=True)
+        return {'FINISHED'}
+
 classes = (
     Dummy, 
     AddTrait, 
@@ -398,7 +428,8 @@ classes = (
     DownRule, 
     OpenOutputDir, 
     UpTrait, 
-    DownTrait
+    DownTrait, 
+    LoadImages
 )
 
 def register():
