@@ -378,6 +378,7 @@ class StatsPanel(bpy.types.Panel):
     def draw(self, context):
         traits = func.get_traits()
         traits_values = func.get_traits_values()
+        tokens = func.get_tokens()
 
         layout = self.layout
         col = layout.column(align=True)
@@ -399,6 +400,7 @@ class StatsPanel(bpy.types.Panel):
                     row.separator()
                     row.label(text=f"{traits_values[entry[0]].metadata_name}: ")
                     row.label(text=f"{entry[1]}")
+                    row.label(text=f"{round(entry[1]/len(tokens)*100, 2)}%")
 
 
 
