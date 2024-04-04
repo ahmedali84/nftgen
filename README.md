@@ -183,6 +183,7 @@ Example of  `token name` and `image URL` prefixes:
 1. Go to `Edit` > `Preferences` > `Addons`
 2. Press `Install` button and browse to the addon `zip` file.  
 ## Contact Me
+- Buy on Gumroad: https://premiero.gumroad.com/l/nftgen
 - Twitter: [@ahmed_ali](https://twitter.com/ahmed_ali)
 - Mastodon: [premiero@mastodon.world](https://mastodon.world/@premiero)
 - Hire me on [Upwork](https://www.upwork.com/freelancers/~0139b13dfd3e208f29)
